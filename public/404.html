@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecting...</title>
+  <script>
+    // Save the originally requested URL and redirect to the app root.
+    // This is paired with the recovery script in index.html.
+    sessionStorage.setItem('spa-redirect', window.location.href);
+    var base = '/';
+    var parts = window.location.pathname.split('/');
+    // For project pages (e.g. /portfolio/...), infer the base segment.
+    if (parts.length > 1 && parts[1] && parts[1] !== '404.html') {
+      base = '/' + parts[1] + '/';
+    }
+    window.location.href = base;
+  </script>
+</head>
+<body>
+  Redirecting...
+</body>
+</html>
