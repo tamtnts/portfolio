@@ -110,8 +110,8 @@ test('homepage sections use compact headings and merge education into experience
   assert.match(focus, /id=['"]highlights['"]/);
   assert.match(focus, /border-l-2/);
   assert.match(stack, /id=['"]tech-stack['"]/);
-  assert.match(stack, /Core Stack/);
-  assert.match(stack, /Delivery & Supporting/);
+  assert.match(stack, /CORE STACK/);
+  assert.match(stack, /INFRASTRUCTURE/);
   assert.match(experience, /profile\.education/);
   assert.match(experience, /profile\.certifications/);
   assert.match(experience, /profile\.english/);
