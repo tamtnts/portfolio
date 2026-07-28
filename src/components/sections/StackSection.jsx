@@ -1,41 +1,24 @@
-import { FaJava, FaLinux } from 'react-icons/fa';
-import { GrOracle } from 'react-icons/gr';
-import { LuNetwork } from 'react-icons/lu';
-import {
-  SiApachekafka,
-  SiElasticsearch,
-  SiGitlab,
-  SiGrafana,
-  SiKubernetes,
-  SiMinio,
-  SiMongodb,
-  SiMqtt,
-  SiNginx,
-  SiPostgresql,
-  SiRancher,
-  SiRedis,
-} from 'react-icons/si';
 import Card from '../Card';
 import Reveal from '../Reveal';
 import { profile } from '../../data/profile';
 
-const toolIcons = {
-  'Java (Spring Boot)': { Icon: FaJava, color: 'text-[#f89820]' },
-  'Netty / TCP': { Icon: LuNetwork, color: 'text-[#00a1d6]' },
-  Kafka: { Icon: SiApachekafka, color: 'text-text' },
-  'EMQX / MQTT': { Icon: SiMqtt, color: 'text-accent2' },
-  Redis: { Icon: SiRedis, color: 'text-[#dc382d]' },
-  'Oracle DB': { Icon: GrOracle, color: 'text-[#f80000]' },
-  PostgreSQL: { Icon: SiPostgresql, color: 'text-[#4169e1]' },
-  MongoDB: { Icon: SiMongodb, color: 'text-[#47a248]' },
-  Elasticsearch: { Icon: SiElasticsearch, color: 'text-[#00bfb3]' },
-  Kubernetes: { Icon: SiKubernetes, color: 'text-[#326ce5]' },
-  Rancher: { Icon: SiRancher, color: 'text-[#0075a8]' },
-  Nginx: { Icon: SiNginx, color: 'text-[#009639]' },
-  Grafana: { Icon: SiGrafana, color: 'text-[#f46800]' },
-  'GitLab CI': { Icon: SiGitlab, color: 'text-[#fc6d26]' },
-  Linux: { Icon: FaLinux, color: 'text-[#fcc624]' },
-  'MinIO / S3': { Icon: SiMinio, color: 'text-[#c72e49]' },
+const toolEmoji = {
+  'Java (Spring Boot)': '☕',
+  'Netty / TCP': '🪄',
+  'Kafka': '💻',
+  'EMQX / MQTT': '🏃',
+  'Redis': '⚡',
+  'Oracle DB': '🚪',
+  'PostgreSQL': '🐘',
+  'MongoDB': '🐊',
+  'Elasticsearch': '🔎',
+  'Kubernetes': '⚛️',
+  'Rancher': '🐮',
+  'Nginx': '🚦',
+  'Grafana': '📊',
+  'GitLab CI': '🔥',
+  'Linux': '🐧',
+  'MinIO / S3': '📦',
 };
 
 const groups = [
@@ -44,11 +27,17 @@ const groups = [
 ];
 
 function ToolPill({ name }) {
-  const { Icon, color } = toolIcons[name];
+  const emoji = toolEmoji[name];
 
   return (
     <li className='inline-flex min-h-8 items-center gap-2 rounded-full border border-border bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-muted sm:text-sm'>
-      <Icon aria-hidden='true' className={`shrink-0 text-sm ${color}`} />
+      <span
+        aria-hidden='true'
+        className='w-4 shrink-0 text-center text-sm leading-none'
+        style={{ fontFamily: "'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif" }}
+      >
+        {emoji}
+      </span>
       <span>{name}</span>
     </li>
   );
