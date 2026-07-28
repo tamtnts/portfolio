@@ -12,7 +12,7 @@ const toolEmoji = {
   'PostgreSQL': '🐘',
   'MongoDB': '🐊',
   'Elasticsearch': '🔎',
-  'Kubernetes': '⚓️',
+  'Kubernetes': '⚛️',
   'Rancher': '🐮',
   'Nginx': '🚦',
   'Grafana': '📊',

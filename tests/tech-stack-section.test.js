@@ -44,7 +44,7 @@ test('tech stack publishes the approved two-card native-emoji layout', async () 
     PostgreSQL: '🐘',
     MongoDB: '🐊',
     Elasticsearch: '🔎',
-    Kubernetes: '⚓️',
+    Kubernetes: '⚛️',
     Rancher: '🐮',
     Nginx: '🚦',
     Grafana: '📊',
