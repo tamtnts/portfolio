@@ -87,7 +87,8 @@ test('homepage uses the compact reference geometry and approved anchors', async 
     assert.match(toc, new RegExp("id: '" + id + "'"));
   }
   assert.match(hero, /text-center/);
-  assert.doesNotMatch(hero, /resume|CV_/i);
+  assert.match(hero, />View CV<\//);
+  assert.match(hero, /profile\.resumeUrl &&/);
   assert.doesNotMatch(home, /EarlierProjectsSection|EducationSection/);
   assert.match(toc, /group-focus-visible:opacity-100/);
   assert.match(styles, /@apply outline-2 outline-accent/);
