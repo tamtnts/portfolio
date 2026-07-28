@@ -5,6 +5,8 @@ import { profile } from '../src/data/profile.js';
 import { projects } from '../src/data/projects.js';
 import { earlierProjects } from '../src/data/earlierProjects.js';
 
+const publicCv = new URL('../public/NguyenThanhTam-CV.pdf', import.meta.url);
+
 test('profile exposes the approved public identity and contact details', () => {
   assert.equal(profile.name, 'Nguyen Thanh Tam');
   assert.equal(profile.role, 'Java Backend Developer');
@@ -13,7 +15,7 @@ test('profile exposes the approved public identity and contact details', () => {
   assert.equal(profile.phone.href, 'tel:+84941346209');
   assert.equal(profile.github, 'https://github.com/tamtnts');
   assert.equal(profile.linkedin, 'https://www.linkedin.com/in/tam-nguyen-thanh-338983260/');
-  assert.equal(profile.resumeUrl, null);
+  assert.equal(profile.resumeUrl, '/NguyenThanhTam-CV.pdf');
   assert.equal(profile.certifications.length, 4);
 });
 
@@ -69,10 +71,38 @@ test('project two uses qualitative highlights instead of invented scale', () => 
 
 test('profile and selected projects keep the approved counts', () => {
   assert.equal(profile.focus.length, 5);
-  assert.equal(profile.resumeUrl, null);
+  assert.equal(profile.resumeUrl, '/NguyenThanhTam-CV.pdf');
   assert.equal(profile.certifications.length, 4);
   assert.equal(earlierProjects.length, 3);
   assert.equal(new Set(earlierProjects.map(({ name }) => name)).size, 3);
+});
+
+test('public CV uses a stable PDF asset and deployment-aware Hero action', async () => {
+  const [pdf, hero, profileSource] = await Promise.all([
+    readFile(publicCv),
+    readFile(
+      new URL('../src/components/sections/HeroSection.jsx', import.meta.url),
+      'utf8',
+    ),
+    readFile(
+      new URL('../src/data/profile.js', import.meta.url),
+      'utf8',
+    ),
+  ]);
+
+  assert.equal(pdf.subarray(0, 5).toString('ascii'), '%PDF-');
+  assert.ok(pdf.length > 0);
+  assert.match(profileSource, /import\.meta\.env\?\.BASE_URL \?\? '\/'/);
+  assert.match(profileSource, /NguyenThanhTam-CV\.pdf/);
+  assert.match(hero, /profile\.resumeUrl &&/);
+  assert.match(hero, /href=\{profile\.resumeUrl\}/);
+  assert.match(hero, />View CV<\//);
+  assert.match(hero, /target="_blank"/);
+  assert.match(hero, /rel="noreferrer"/);
+  assert.doesNotMatch(
+    [hero, profileSource].join(' '),
+    /[A-Za-z]:\\Users\\|\/Users\/|\/home\//,
+  );
 });
 
 test('homepage composes every approved section and omits resume metrics', async () => {

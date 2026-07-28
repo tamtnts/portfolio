@@ -1,3 +1,5 @@
+const deploymentBase = import.meta.env?.BASE_URL ?? '/';
+
 export const profile = {
   name: 'Nguyen Thanh Tam',
   shortName: 'Tam Nguyen',
@@ -9,7 +11,7 @@ export const profile = {
   phone: { label: '0941 346 209', href: 'tel:+84941346209' },
   github: 'https://github.com/tamtnts',
   linkedin: 'https://www.linkedin.com/in/tam-nguyen-thanh-338983260/',
-  resumeUrl: null,
+  resumeUrl: `${deploymentBase}NguyenThanhTam-CV.pdf`,
   summary:
     'I build maintainable REST APIs and data-intensive backend services for logistics operations, with a focus on clear service boundaries, reliable integrations, and efficient database access.',
   focus: [
