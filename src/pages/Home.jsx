@@ -30,9 +30,8 @@ export default function Home() {
     url: `${siteUrl}/`,
     sameAs: [profile.github, profile.linkedin],
     knowsAbout: [
-      ...profile.stack.backend,
-      ...profile.stack.dataMessaging,
-      ...profile.stack.delivery,
+      ...profile.stack.core,
+      ...profile.stack.infrastructure,
     ],
   };
 
