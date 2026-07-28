@@ -14,15 +14,63 @@ test('profile exposes the approved public identity and contact details', () => {
   assert.equal(profile.github, 'https://github.com/tamtnts');
   assert.equal(profile.linkedin, 'https://www.linkedin.com/in/tam-nguyen-thanh-338983260/');
   assert.equal(profile.resumeUrl, null);
-  assert.equal(profile.focus.length, 4);
   assert.equal(profile.certifications.length, 4);
 });
 
-test('portfolio publishes the approved project counts and slugs', () => {
+test('portfolio publishes two complete NDA-safe case studies', () => {
   assert.deepEqual(
     projects.map(({ slug }) => slug),
-    ['fleet-operations-platform', 'fleetops-data-hub'],
+    ['fleet-operations-management-platform', 'fleetops-data-hub'],
   );
+
+  for (const project of projects) {
+    assert.equal(project.featured, true);
+    assert.ok(project.title);
+    assert.ok(project.subtitle);
+    assert.ok(project.disclaimer);
+    assert.ok(project.overview.domain);
+    assert.equal(project.overview.role, 'Java Backend Developer');
+    assert.equal(project.overview.duration, undefined);
+    assert.equal(project.overview.teamSize, undefined);
+    assert.ok(project.tags.length >= 5);
+    assert.ok(project.requirements.length >= 4);
+    assert.ok(project.challenges.length >= 4);
+    assert.ok(project.mermaid.title);
+    assert.match(project.mermaid.code, /^flowchart /);
+    assert.ok(project.mainFlow.length >= 5);
+    assert.ok(project.contributions.length >= 4);
+    assert.ok(project.techStack.length >= 6);
+    assert.ok(Object.keys(project.scaling).length >= 3);
+    assert.ok(project.reliabilitySecurity.length >= 4);
+    assert.ok(project.tradeoffs.length >= 3);
+    assert.ok(project.outcome.length >= 2);
+    assert.ok(project.lessons.length >= 3);
+  }
+});
+
+test('project one uses only approved delivery counts', () => {
+  const project = projects[0];
+  const publicMetrics = Object.values(project.scaling).join(' ');
+  assert.match(publicMetrics, /~40/);
+  assert.match(publicMetrics, /~20/);
+  assert.match(publicMetrics, /~15/);
+  assert.doesNotMatch(publicMetrics, /latency|requests per|users|availability|uptime/i);
+});
+
+test('project two uses qualitative highlights instead of invented scale', () => {
+  const publicMetrics = Object.values(projects[1].scaling);
+  assert.deepEqual(publicMetrics, [
+    'Multi-source integration',
+    'Event-driven synchronization',
+    'Search-optimized reads',
+  ]);
+  assert.doesNotMatch(publicMetrics.join(' '), /\d/);
+});
+
+test('profile and selected projects keep the approved counts', () => {
+  assert.equal(profile.focus.length, 5);
+  assert.equal(profile.resumeUrl, null);
+  assert.equal(profile.certifications.length, 4);
   assert.equal(earlierProjects.length, 3);
   assert.equal(new Set(earlierProjects.map(({ name }) => name)).size, 3);
 });
@@ -38,8 +86,6 @@ test('homepage composes every approved section and omits resume metrics', async 
     'StackSection',
     'ProjectsSection',
     'ExperienceSection',
-    'EarlierProjectsSection',
-    'EducationSection',
     'ContactSection',
   ];
 
@@ -59,10 +105,17 @@ test('prerender and sitemap expose only approved public routes', async () => {
     'utf8',
   );
 
-  for (const slug of projects.map(({ slug }) => slug)) {
+  for (const slug of [
+    'fleet-operations-management-platform',
+    'fleetops-data-hub',
+  ]) {
     assert.match(prerender, new RegExp(`/projects/${slug}`));
     assert.match(sitemap, new RegExp(`/projects/${slug}`));
   }
+  assert.doesNotMatch(prerender, /fleet-operations-platform/);
+  assert.doesNotMatch(sitemap, /fleet-operations-platform/);
+  assert.match(prerender, /const basePath = normalizeBasePath\(process\.env\.VITE_BASE\);/);
+  assert.match(prerender, /resolveStaticFilePath\(distDir, pathname, basePath\)/);
   assert.doesNotMatch(prerender, /\/cv\//);
   assert.doesNotMatch(sitemap, /gitlab|\/cv\//i);
 });
@@ -80,21 +133,24 @@ test('case studies and publishing assets implement the approved release contract
     new URL('../public/favicon.svg', import.meta.url),
     'utf8',
   );
-  const packageJson = await readFile(
+  const packageJson = JSON.parse(await readFile(
     new URL('../package.json', import.meta.url),
     'utf8',
-  );
+  ));
 
   for (const heading of [
-    'Context',
-    'Role & responsibilities',
-    'Key modules',
-    'Architecture & data flow',
-    'Technical decisions',
-    'Challenges',
-    'Technology stack',
-    'Outcome',
-    'Lessons learned',
+    'Overview',
+    'Requirements',
+    'Key Challenges',
+    'Architecture Diagram',
+    'Main Flow',
+    'My Contributions',
+    'Tech Stack',
+    'Delivery Scope & Highlights',
+    'Reliability & Security',
+    'Trade-offs / Design Decisions',
+    'Outcome / Impact',
+    'Lessons Learned',
   ]) {
     assert.match(detail, new RegExp(heading.replace('&', '&amp;|&')));
   }
@@ -103,7 +159,8 @@ test('case studies and publishing assets implement the approved release contract
   assert.match(workflow, /playwright install.*chromium/);
   assert.match(workflow, /enablement:\s*true/);
   assert.match(favicon, />NT</);
-  assert.doesNotMatch(packageJson, /mermaid|react-zoom-pan-pinch/);
+  assert.equal(packageJson.dependencies.mermaid, '^11.12.2');
+  assert.equal(packageJson.dependencies['react-zoom-pan-pinch'], '^3.7.0');
 });
 
 test('navbar home anchors preserve the configured deployment base path', async () => {

@@ -8,7 +8,7 @@ const isPrerender = typeof window !== 'undefined' && window.__PRERENDER__;
 const Router = isPrerender ? StaticRouter : BrowserRouter;
 
 const routerProps = isPrerender
-  ? { location: window.location.pathname }
+  ? { location: window.location.pathname, basename: import.meta.env.BASE_URL }
   : { basename: import.meta.env.BASE_URL };
 
 createRoot(document.getElementById('root')).render(

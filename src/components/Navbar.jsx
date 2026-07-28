@@ -14,14 +14,14 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-bg/85 backdrop-blur-xl">
-      <Container className="flex min-h-16 items-center justify-between gap-4">
+      <Container className="flex min-h-14 items-center justify-between gap-4">
         <Link
           to="/"
           className="font-mono text-sm font-bold tracking-tight text-text no-underline"
         >
-          {profile.shortName}<span className="text-accent">.backend</span>
+          {profile.shortName}<span className="text-accent">@backend</span>
         </Link>
-        <nav aria-label="Primary navigation" className="flex items-center gap-5 text-sm">
+        <nav aria-label="Primary navigation" className="flex items-center gap-4 text-sm">
           <a
             href={`${homeUrl}#projects`}
             onClick={(event) => handleHomeAnchor(event, 'projects')}

@@ -16,22 +16,27 @@ export const profile = {
     {
       title: 'REST APIs & Service Design',
       description:
-        'Maintainable Spring Boot services with clear contracts and practical boundaries.',
+        'Maintainable Spring Boot services with explicit contracts and practical boundaries.',
     },
     {
       title: 'Database & Query Optimization',
       description:
-        'Data models, indexes, and query improvements for operational workloads.',
+        'Data models, indexes, and measured query improvements for operational workloads.',
     },
     {
-      title: 'Event-Driven Integrations',
+      title: 'Event-Driven Processing',
       description:
-        'Kafka workers and gRPC/REST communication across internal services.',
+        'Kafka consumers and synchronization workers for reliable asynchronous workflows.',
     },
     {
-      title: 'Caching & Coordination',
+      title: 'Service Integration',
       description:
-        'Redis caching, temporary state, rate limiting, and distributed coordination.',
+        'gRPC and REST adapters that normalize data from multiple internal services.',
+    },
+    {
+      title: 'Search & Document Workflows',
+      description:
+        'Elasticsearch-backed operational search and template-driven document generation.',
     },
   ],
   stack: {

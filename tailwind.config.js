@@ -4,18 +4,19 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: '#07111f',
-        surface: '#0b1728',
+        bg: '#0b0f14',
+        surface: '#0f1722',
         panel: 'rgba(255,255,255,0.045)',
         border: 'rgba(148,163,184,0.18)',
-        text: '#e8f2ff',
-        muted: '#9fb0c4',
-        accent: '#67e8f9',
-        accentStrong: '#22d3ee',
+        text: '#e6edf3',
+        muted: '#94a3b8',
+        accent: '#38bdf8',
+        accent2: '#a78bfa',
+        primary: '#60a5fa',
         ok: '#34d399',
       },
       boxShadow: {
-        console: '0 28px 90px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.035)',
+        glow: '0 22px 65px rgba(0,0,0,0.32)',
       },
       fontFamily: {
         mono: [

@@ -1,32 +1,18 @@
 # Nguyen Thanh Tam Portfolio
 
-English portfolio for Nguyen Thanh Tam, a Java Backend Developer based in Ho Chi Minh City. It presents backend engineering strengths, experience, technical skills, two NDA-safe logistics case studies, education, certifications, and public contact details.
+Public portfolio for Nguyen Thanh Tam, Java Backend Developer. Built with React, Vite, and Tailwind CSS.
 
-## Local development
+## Local verification
 
-```bash
-npm install
-npm run dev
-```
-
-## Quality checks
-
-```bash
+```powershell
 npm test
 npm run lint
+$env:VITE_BASE='/portfolio/'
 npm run build
 ```
 
-The prerender step uses Playwright Chromium. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` when using an existing local browser executable.
-
-## Content
-
-- Profile and contact data: `src/data/profile.js`
-- Featured case studies: `src/data/projects.js`
-- Earlier projects: `src/data/earlierProjects.js`
-
-Keep project descriptions NDA-safe. Do not add customer names, sensitive operational data, or unverified performance claims.
+After the build, clear the local base-path override with `Remove-Item Env:VITE_BASE`.
 
 ## Deployment
 
-Pushes to `main` are verified, built, and deployed to GitHub Pages by `.github/workflows/deploy.yml`.
+Changes pushed to `main` are verified, built, and deployed to GitHub Pages by `.github/workflows/deploy.yml`.
