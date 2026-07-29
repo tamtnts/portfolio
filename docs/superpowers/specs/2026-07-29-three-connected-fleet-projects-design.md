@@ -24,7 +24,9 @@ No quantitative contribution or performance claims will be published.
 
 ## Platform Relationship
 
-The homepage introduces the three case studies with a generalized ecosystem diagram:
+The homepage introduces the three case studies with a generalized C1 System Context diagram. It presents people, the Fleet Operations Platform as one software system, and approved external operational data sources. It does not expose internal services, databases, Kafka, or deployment topology.
+
+The service relationship used by the C2 Container views is:
 
 ```mermaid
 flowchart LR
@@ -43,7 +45,7 @@ flowchart LR
   Data -->|Aggregated read responses| Admin
 ```
 
-This diagram is a public conceptual view, not the private production topology. It communicates only the approved relationships:
+This container relationship is a public conceptual view, not the private production topology. It communicates only the approved relationships:
 
 - Administration and Dispatch supplies planning, resource, and configuration context to operational workflows.
 - Operations Core executes interactive workflows and publishes relevant operational events.
@@ -56,7 +58,7 @@ This diagram is a public conceptual view, not the private production topology. I
 Add a **Fleet Operations Platform** introduction immediately before the featured-project cards. It contains:
 
 - a short statement that the case studies represent services in one platform;
-- the generalized ecosystem diagram;
+- the generalized C1 System Context diagram;
 - an NDA note explaining that names and boundaries have been anonymized.
 
 Render three featured cards in a three-column grid on large screens and a single-column layout on small screens. Card labels are:
@@ -74,7 +76,7 @@ All three detail pages use the same established sections:
 1. Overview
 2. Requirements
 3. Key Challenges
-4. Architecture Diagram
+4. C4 Model
 5. Main Flow
 6. My Contributions
 7. Tech Stack
@@ -83,7 +85,15 @@ All three detail pages use the same established sections:
 10. Outcome / Impact
 11. Lessons Learned
 
-Each page identifies the project as a service within the Fleet Operations Platform. Its architecture diagram shows all three services, highlights the current service, and expands only its generalized internal responsibilities.
+Each page identifies the project as a service within the Fleet Operations Platform. Its C4 section renders three diagrams vertically in this order:
+
+1. **C1 — System Context:** the shared platform-level context.
+2. **C2 — Container:** the shared container topology with the current service highlighted.
+3. **C3 — Component:** the current service's generalized internal responsibilities.
+
+The vertical layout keeps every level visible in prerendered output and avoids hidden tab state. The featured-card **Preview Architecture** action opens the project's C2 Container view.
+
+No C4 Code diagram is published because source-level class, package, and module details are outside the public confidentiality boundary.
 
 Add **Related Platform Services** at the bottom of each case study, linking to the other two project pages.
 
@@ -166,6 +176,82 @@ Describe synchronization workers, lookup APIs, query handling, Elasticsearch int
 
 Technology lists describe evidenced integration boundaries. They must not imply sole ownership, universal use across every flow, or a specific production deployment.
 
+## Approved C4 Model
+
+### C1 — Shared System Context
+
+**People**
+
+- Fleet Operations Staff uses the Fleet Operations Platform for supported workflow, lookup, reporting, and document-generation needs.
+- Administrator / Dispatcher uses the Fleet Operations Platform for supported planning, resource, device, configuration, and coordination needs.
+
+**Software systems**
+
+- Fleet Operations Platform is the single system in scope.
+- Approved Operational Data Sources is the generalized external-system boundary.
+
+**Relationships**
+
+- Fleet Operations Staff uses the Fleet Operations Platform.
+- Administrator / Dispatcher administers and coordinates work through the Fleet Operations Platform.
+- Fleet Operations Platform exchanges approved data with external sources through generalized REST/gRPC or event boundaries.
+
+### C2 — Container Views
+
+Every project page uses the same platform container topology and highlights its current service.
+
+**Clients and service containers**
+
+- Operations Client calls Fleet Operations Core through REST/gRPC.
+- Administration Client calls Fleet Administration & Dispatch through REST/gRPC.
+- Fleet Administration & Dispatch supplies plans, resources, and configuration context to Fleet Operations Core through REST/gRPC.
+- Fleet Operations Core requests aggregated lookup and search data from Fleet Data Intelligence Hub through REST/gRPC.
+- Fleet Administration & Dispatch can request supported aggregated lookup data from Fleet Data Intelligence Hub through REST/gRPC.
+- Fleet Operations Core and Fleet Administration & Dispatch publish selected events to Kafka.
+- Fleet Data Intelligence Hub consumes selected synchronization events from Kafka.
+
+**Generalized data containers**
+
+- Fleet Operations Core uses a relational store and explicit Redis state.
+- Fleet Administration & Dispatch uses a relational store and Redis-backed cache or coordination state.
+- Fleet Data Intelligence Hub uses read-oriented relational data, MongoDB where relevant, and Elasticsearch search projections.
+
+The C2 diagrams do not contain hosts, clusters, topics, database schemas, service addresses, or production deployment details.
+
+### C3 — Fleet Operations Core Components
+
+- REST/gRPC API accepts and maps supported requests.
+- Workflow & Query Use Cases orchestrates workflow, lookup, statistics, and document-generation responsibilities.
+- Persistence Adapter accesses the generalized relational store.
+- Cache Adapter accesses explicit Redis state.
+- Service Integration Adapters call Administration & Dispatch and Data Intelligence Hub through REST/gRPC.
+- Event Adapter exchanges selected asynchronous events through Kafka.
+- Document Renderer produces approved document outputs.
+
+### C3 — Fleet Administration & Dispatch Components
+
+- REST/gRPC API accepts supported administration requests.
+- Planning & Coordination Use Cases handles supported plan and assignment workflows.
+- Resource & Device Use Cases handles supported resource and device responsibilities.
+- Configuration & Reference Use Cases handles supported configuration and reference-data responsibilities.
+- Persistence Adapter accesses the generalized relational store.
+- Cache & Coordination Adapter uses Redis and ShedLock where relevant.
+- Service Integration Adapters call Operations Core and Data Intelligence Hub through REST/gRPC.
+- Event Adapter exchanges selected asynchronous events through Kafka.
+- Report & Export Renderer produces approved administration outputs.
+
+### C3 — Fleet Data Intelligence Hub Components
+
+- Kafka Consumers receive selected synchronization events.
+- Integration Adapters receive approved data through service integrations.
+- Synchronization Workers coordinate synchronization and resynchronization flows.
+- Normalization & Mapping converts approved source contracts into read-oriented records.
+- Data Repositories access generalized relational and MongoDB data.
+- Search Adapter maintains and queries Elasticsearch projections.
+- Integration State Tracking records generalized integration and resynchronization state.
+- REST/gRPC Lookup API accepts supported lookup and aggregation requests.
+- Query & Aggregation Services select data-repository or search access according to the read need.
+
 ## Reliability and Design-Decision Themes
 
 Use only qualitative, defensible themes:
@@ -199,7 +285,11 @@ All names, diagrams, and descriptions are fictionalized and generalized while pr
 - The homepage presents exactly three featured case studies.
 - The shared platform relationship is visible before the three cards.
 - Each project has a unique route, architecture preview, and full case-study page.
-- Each detail diagram shows how its service relates to the other two.
+- The homepage and every detail page show the shared C1 System Context view.
+- Every project page shows a C2 Container view with the current service highlighted.
+- Every project page shows its own evidence-backed C3 Component view.
+- C1, C2, and C3 render vertically and remain present in prerendered output.
+- Each architecture preview opens the corresponding project's C2 view.
 - Every detail page links to the other platform services.
 - Existing responsive, accessible, SEO, prerender, sitemap, and GitHub Pages behavior remains valid.
 - Automated tests expect three approved routes and reject legacy or private identifiers.
@@ -208,6 +298,7 @@ All names, diagrams, and descriptions are fictionalized and generalized while pr
 ## Explicit Non-Goals
 
 - Reproducing the private system's exact architecture or business domain.
+- Publishing a C4 Code view or source-level class/package structure.
 - Publishing source-derived names, metrics, schemas, or infrastructure details.
 - Adding claims about team size, duration, performance, availability, or business impact without user confirmation.
 - Changing unrelated profile, experience, education, certificate, contact, or CV content.
