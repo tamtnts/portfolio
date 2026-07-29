@@ -41,8 +41,10 @@ test('portfolio publishes three complete NDA-safe connected case studies', () =>
     assert.ok(project.tags.length >= 5);
     assert.ok(project.requirements.length >= 4);
     assert.ok(project.challenges.length >= 4);
-    assert.ok(project.mermaid.title);
-    assert.match(project.mermaid.code, /^flowchart /);
+    assert.equal(project.c4.container.level, 'C2');
+    assert.match(project.c4.container.code, /^flowchart /);
+    assert.equal(project.c4.component.level, 'C3');
+    assert.match(project.c4.component.code, /^flowchart /);
     assert.ok(project.mainFlow.length >= 5);
     assert.ok(project.contributions.length >= 4);
     assert.ok(project.techStack.length >= 6);

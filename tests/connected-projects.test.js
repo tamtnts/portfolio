@@ -22,9 +22,18 @@ test('publishes three connected fleet-platform services', () => {
     assert.equal(project.highlights.length, 3);
     assert.equal(project.scaling, undefined);
 
+    assert.equal(project.c4.container.level, 'C2');
+    assert.equal(project.c4.component.level, 'C3');
+    assert.equal(project.mermaid, undefined);
+
     for (const [, title] of expectedProjects) {
-      assert.match(project.mermaid.code, new RegExp(title.replace('&', '&')));
+      assert.match(project.c4.container.code, new RegExp(title));
     }
+
+    assert.match(project.c4.container.code, /REST\/gRPC/);
+    assert.match(project.c4.container.code, /Kafka/);
+    assert.match(project.c4.container.code, new RegExp(`class ${project.c4.container.currentId} current`));
+    assert.doesNotMatch(project.c4.component.code, /Person:|Software System:|External System:/);
   }
 });
 

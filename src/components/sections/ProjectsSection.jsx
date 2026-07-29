@@ -17,10 +17,11 @@ export default function ProjectsSection() {
   });
 
   const openDiagram = (project) => {
+    const container = project.c4.container;
     setModal({
       open: true,
-      title: project.mermaid.title,
-      code: project.mermaid.code,
+      title: `${container.level} â€” ${project.title}: ${container.title}`,
+      code: container.code,
     });
   };
 
