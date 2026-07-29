@@ -38,11 +38,10 @@ test('large project pages render the complete approved case-study form', async (
     'Overview',
     'Requirements',
     'Key Challenges',
-    'Architecture Diagram',
+    'C4 Model',
     'Main Flow',
     'My Contributions',
     'Tech Stack',
-    'Delivery Scope & Highlights',
     'Reliability & Security',
     'Trade-offs / Design Decisions',
     'Outcome / Impact',
@@ -50,9 +49,25 @@ test('large project pages render the complete approved case-study form', async (
   ]) {
     assert.ok(detail.includes(heading), 'Missing heading: ' + heading);
   }
-  assert.match(detail, /MermaidDiagram/);
   assert.match(detail, /if \(!when\) return null/);
   assert.match(detail, /Project not found/);
+});
+
+test('project pages render C1 C2 and C3 vertically with related services', async () => {
+  const [detail, c4Model] = await Promise.all([
+    source('../src/pages/ProjectDetail.jsx'),
+    source('../src/components/C4Model.jsx'),
+  ]);
+
+  assert.match(detail, /fleetPlatform\.c4\.context/);
+  assert.match(detail, /project\.c4\.container/);
+  assert.match(detail, /project\.c4\.component/);
+  assert.match(detail, /relatedProjects/);
+  assert.match(detail, /Related Platform Services/);
+  assert.match(c4Model, /\[context, container, component\]/);
+  assert.match(c4Model, /MermaidDiagram/);
+  assert.doesNotMatch(c4Model, /tab|hidden/i);
+  assert.doesNotMatch(detail, /Delivery Scope & Highlights/);
 });
 
 test('project cards expose qualitative highlights, detail navigation, and architecture preview', async () => {
