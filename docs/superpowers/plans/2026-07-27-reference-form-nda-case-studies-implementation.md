@@ -132,7 +132,7 @@ test('portfolio publishes two complete NDA-safe case studies', () => {
     assert.ok(project.subtitle);
     assert.ok(project.disclaimer);
     assert.ok(project.overview.domain);
-    assert.equal(project.overview.role, 'Java Backend Developer');
+    assert.equal(project.overview.role, 'Middle Backend Developer');
     assert.equal(project.overview.duration, undefined);
     assert.equal(project.overview.teamSize, undefined);
     assert.ok(project.tags.length >= 5);
@@ -263,7 +263,7 @@ export const projects = [
       'Names, business rules, data, topology, and customer details are fictionalized or generalized for confidentiality.',
     overview: {
       domain: 'NDA-safe logistics fleet operations',
-      role: 'Java Backend Developer',
+      role: 'Middle Backend Developer',
       scale: 'Delivery scope is represented only by approved API and query counts.',
     },
     requirements: [
@@ -348,7 +348,7 @@ export const projects = [
       'The business domain and system boundaries are generalized; no customer, partner, or production details are published.',
     overview: {
       domain: 'Multi-source logistics data integration and search',
-      role: 'Java Backend Developer',
+      role: 'Middle Backend Developer',
     },
     requirements: [
       'Consolidate vehicle, journey, delivery-status, and operational-incident records.',
@@ -1164,7 +1164,7 @@ public/sitemap.xml contains only the homepage and these two project URLs under h
 
 - [ ] **Step 4: Update README with only current public facts**
 
-README contains Nguyen Thanh Tam - Java Backend Developer, React/Vite/Tailwind, the four local verification commands, and GitHub Pages deployment from main. It contains no private-reference, legacy-source, CV, customer, or alternative-remote details.
+README contains Nguyen Thanh Tam - Middle Backend Developer, React/Vite/Tailwind, the four local verification commands, and GitHub Pages deployment from main. It contains no private-reference, legacy-source, CV, customer, or alternative-remote details.
 
 - [ ] **Step 5: Verify SEO assets are Tam-only**
 

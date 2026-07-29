@@ -6,7 +6,7 @@ const siteUrl = 'https://tamtnts.github.io/portfolio';
 const ogImage = `${siteUrl}/og.svg`;
 const home = {
   route: '/',
-  title: 'Nguyen Thanh Tam - Java Backend Developer',
+  title: 'Nguyen Thanh Tam - Middle Backend Developer',
   canonical: `${siteUrl}/`,
   ogImage,
 };

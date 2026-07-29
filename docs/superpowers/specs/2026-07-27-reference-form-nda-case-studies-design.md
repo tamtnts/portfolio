@@ -7,7 +7,7 @@ Status: Approved direction; awaiting final written-spec review
 
 Update the Nguyen Thanh Tam portfolio so that it preserves the visual form, information density, navigation, project cards, architecture preview, and large-project case-study structure of the approved reference portfolio while publishing only Nguyen Thanh Tam's identity and work.
 
-The portfolio remains an English-language, recruiter-first website for Java Backend Developer opportunities. It must demonstrate backend depth through concrete but NDA-safe project narratives without copying private source code, internal identifiers, customer information, production data, or proprietary diagrams.
+The portfolio remains an English-language, recruiter-first website for Middle Backend Developer opportunities. It must demonstrate backend depth through concrete but NDA-safe project narratives without copying private source code, internal identifiers, customer information, production data, or proprietary diagrams.
 
 This change updates the portfolio website only. It does not modify or regenerate Nguyen Thanh Tam's CV PDF.
 
@@ -69,7 +69,7 @@ This preserves the original form while retaining all approved Nguyen Thanh Tam c
 ### 4.1 Hero
 
 - Name: Nguyen Thanh Tam
-- Role: Java Backend Developer
+- Role: Middle Backend Developer
 - Status: Open to Work & Freelance Projects
 - Location: Ho Chi Minh City
 - Work modes: Onsite, Hybrid, Remote
@@ -110,7 +110,7 @@ They use Nguyen Thanh Tam's links only when those links are verified and safe. N
 
 Timeline entries:
 
-- GTEL OTS - Java Backend Developer - Aug 2024 to Present
+- GTEL OTS - Middle Backend Developer - Aug 2024 to Present
 - FPT Software - Internship - period omitted by request
 - FPT University, Ho Chi Minh City - Software Engineering - 2019 to 2023 - Good classification
 
@@ -129,7 +129,7 @@ English: Intermediate - able to communicate and read technical documentation.
 
 - Title: **Fleet Operations Management Platform**
 - Slug: `fleet-operations-management-platform`
-- Role: Java Backend Developer
+- Role: Middle Backend Developer
 - Domain: NDA-safe logistics fleet operations
 - Subtitle: a Spring backend that unifies multi-source vehicle and journey lookup, operational workflows, analytics, and document generation.
 - Disclaimer: names, business rules, data, topology, and customer details are fictionalized or generalized for confidentiality.
@@ -263,11 +263,11 @@ Lessons:
 
 ## 6. Featured Project Two
 
-### 6.1 Public identity
+-### 6.1 Public identity
 
 - Title: **FleetOps Data Hub**
 - Slug: `fleetops-data-hub`
-- Role: Java Backend Developer
+- Role: Middle Backend Developer
 - Domain: multi-source logistics data integration and search
 
 ### 6.2 Confirmed scope

@@ -9,7 +9,7 @@ const publicCv = new URL('../public/NguyenThanhTam-CV.pdf', import.meta.url);
 
 test('profile exposes the approved public identity and contact details', () => {
   assert.equal(profile.name, 'Nguyen Thanh Tam');
-  assert.equal(profile.role, 'Java Backend Developer');
+  assert.equal(profile.role, 'Middle Backend Developer');
   assert.equal(profile.location, 'Ho Chi Minh City');
   assert.equal(profile.email, 'tamtnts@gmail.com');
   assert.equal(profile.phone.href, 'tel:+84941346209');
@@ -31,7 +31,7 @@ test('portfolio publishes two complete NDA-safe case studies', () => {
     assert.ok(project.subtitle);
     assert.ok(project.disclaimer);
     assert.ok(project.overview.domain);
-    assert.equal(project.overview.role, 'Java Backend Developer');
+    assert.equal(project.overview.role, 'Middle Backend Developer');
     assert.equal(project.overview.duration, undefined);
     assert.equal(project.overview.teamSize, undefined);
     assert.ok(project.tags.length >= 5);
@@ -96,7 +96,7 @@ test('public CV uses a stable PDF asset and deployment-aware Hero action', async
   assert.match(profileSource, /NguyenThanhTam-CV\.pdf/);
   assert.match(hero, /profile\.resumeUrl &&/);
   assert.match(hero, /href=\{profile\.resumeUrl\}/);
-  assert.match(hero, />View CV<\//);
+  assert.match(hero, />Review CV<\//);
   assert.match(hero, /target="_blank"/);
   assert.match(hero, /rel="noreferrer"/);
   assert.doesNotMatch(

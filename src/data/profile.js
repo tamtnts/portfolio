@@ -3,7 +3,7 @@ const deploymentBase = import.meta.env?.BASE_URL ?? '/';
 export const profile = {
   name: 'Nguyen Thanh Tam',
   shortName: 'Tam Nguyen',
-  role: 'Java Backend Developer',
+  role: 'Middle Backend Developer',
   status: 'Open to Work & Freelance Projects',
   location: 'Ho Chi Minh City',
   workModes: ['Onsite', 'Hybrid', 'Remote'],
@@ -66,7 +66,7 @@ export const profile = {
   experience: [
     {
       company: 'GTEL OTS',
-      role: 'Java Backend Developer',
+      role: 'Middle Backend Developer',
       period: 'Aug 2024 - Present',
       highlights: [
         'Develop and maintain REST APIs for vehicle lookup, journey data, operational statistics, and record exports.',

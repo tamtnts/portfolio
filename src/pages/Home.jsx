@@ -12,7 +12,7 @@ import { profile } from '../data/profile';
 const title = 'Nguyen Thanh Tam - Middle Backend Developer';
 const siteUrl = 'https://tamtnts.github.io/portfolio';
 const description =
-  'Portfolio of Nguyen Thanh Tam, a Middle Backend Developer building maintainable REST APIs, data services, and backend integrations.';
+  'Portfolio of Nguyen Thanh Tam, Middle Backend Developer building maintainable REST APIs, data services, and backend integrations.';
 
 export default function Home() {
   const personSchema = {

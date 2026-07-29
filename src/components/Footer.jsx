@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="font-mono">
           &copy; {new Date().getFullYear()} {profile.name}
         </div>
-        <div>Java backend developer portfolio.</div>
+        <div>Middle backend developer portfolio.</div>
       </Container>
     </footer>
   );

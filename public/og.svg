@@ -8,6 +8,6 @@
   <rect width="1200" height="630" fill="url(#background)"/>
   <circle cx="1040" cy="80" r="310" fill="#22d3ee" fill-opacity="0.08"/>
   <text x="80" y="275" fill="#f8fafc" font-size="68" font-family="Arial, sans-serif" font-weight="700">Nguyen Thanh Tam</text>
-  <text x="80" y="350" fill="#67e8f9" font-size="34" font-family="Arial, sans-serif">Java Backend Developer</text>
+  <text x="80" y="350" fill="#67e8f9" font-size="34" font-family="Arial, sans-serif">Middle Backend Developer</text>
   <text x="80" y="430" fill="#94a3b8" font-size="24" font-family="Arial, sans-serif">REST APIs / Data / Integrations</text>
 </svg>
