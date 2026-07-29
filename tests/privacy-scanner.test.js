@@ -89,6 +89,14 @@ test('skips recognized binary content', async () => {
       join(fixtureDir, 'image.gif'),
       Buffer.concat([Buffer.from('GIF89a'), Buffer.from(harmlessToken)]),
     );
+    await writeFile(
+      join(fixtureDir, 'document.blob'),
+      Buffer.concat([
+        Buffer.from('%PDF-1.4\n%'),
+        Buffer.from([0xff, 0xfe, 0x80]),
+        Buffer.from(harmlessToken),
+      ]),
+    );
 
     const violations = await scanPublishableContent({
       rootDir,
