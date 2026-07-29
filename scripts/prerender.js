@@ -23,8 +23,9 @@ const viteIndexShell = readFileSync(resolve(distDir, 'index.html'), 'utf8');
 
 const ROUTES = [
   '/',
-  '/projects/fleet-operations-management-platform',
-  '/projects/fleetops-data-hub',
+  '/projects/fleet-operations-core',
+  '/projects/fleet-administration-dispatch',
+  '/projects/fleet-data-intelligence-hub',
 ];
 
 const MIME_TYPES = {

@@ -130,12 +130,23 @@ test('prerender and sitemap expose only approved public routes', async () => {
     'utf8',
   );
 
-  for (const slug of [
+  const approvedSlugs = [
+    'fleet-operations-core',
+    'fleet-administration-dispatch',
+    'fleet-data-intelligence-hub',
+  ];
+
+  for (const slug of approvedSlugs) {
+    assert.match(prerender, new RegExp(`/projects/${slug}`));
+    assert.match(sitemap, new RegExp(`/projects/${slug}`));
+  }
+
+  for (const retiredSlug of [
     'fleet-operations-management-platform',
     'fleetops-data-hub',
   ]) {
-    assert.match(prerender, new RegExp(`/projects/${slug}`));
-    assert.match(sitemap, new RegExp(`/projects/${slug}`));
+    assert.doesNotMatch(prerender, new RegExp(`/projects/${retiredSlug}`));
+    assert.doesNotMatch(sitemap, new RegExp(`/projects/${retiredSlug}`));
   }
   assert.doesNotMatch(prerender, /fleet-operations-platform/);
   assert.doesNotMatch(sitemap, /fleet-operations-platform/);

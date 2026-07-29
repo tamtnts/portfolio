@@ -1,3 +1,24 @@
+const NAMED_CHARACTER_REFERENCES = {
+  amp: '&',
+  apos: "'",
+  gt: '>',
+  lt: '<',
+  quot: '"',
+};
+
+function decodeHtmlCharacterReferences(value) {
+  return value.replace(/&(?:(#x[0-9a-f]+)|(#\d+)|(amp|apos|gt|lt|quot));/gi, (reference, hexadecimal, decimal, named) => {
+    if (named) return NAMED_CHARACTER_REFERENCES[named.toLowerCase()];
+
+    const codePoint = Number.parseInt(
+      hexadecimal ? hexadecimal.slice(2) : decimal.slice(1),
+      hexadecimal ? 16 : 10,
+    );
+    if (codePoint < 0 || codePoint > 0x10ffff) return reference;
+    return String.fromCodePoint(codePoint);
+  });
+}
+
 function tagsWithAttribute(html, tagName, attribute, expectedValue) {
   const tags = html.match(new RegExp(`<${tagName}\\b[^>]*>`, 'gi')) || [];
   return tags.filter((tag) => {
@@ -7,7 +28,8 @@ function tagsWithAttribute(html, tagName, attribute, expectedValue) {
 }
 
 function getAttribute(tag, attribute) {
-  return new RegExp(`\\b${attribute}\\s*=\\s*(["'])(.*?)\\1`, 'i').exec(tag)?.[2] || null;
+  const value = new RegExp(`\\b${attribute}\\s*=\\s*(["'])(.*?)\\1`, 'i').exec(tag)?.[2];
+  return value ? decodeHtmlCharacterReferences(value) : null;
 }
 
 function requireExactlyOne(tags, description, route) {
@@ -20,7 +42,9 @@ function requireExactlyOne(tags, description, route) {
 export function validatePrerenderedHtml(html, expectedMetadata, configuredBasePath) {
   const { route, title: expectedTitle, canonical: expectedCanonical, ogImage: expectedOgImage } = expectedMetadata;
   const titleTags = html.match(/<title\b[^>]*>[\s\S]*?<\/title>/gi) || [];
-  const title = requireExactlyOne(titleTags, 'title', route).replace(/<[^>]+>/g, '');
+  const title = decodeHtmlCharacterReferences(
+    requireExactlyOne(titleTags, 'title', route).replace(/<[^>]+>/g, ''),
+  );
   if (title !== expectedTitle) {
     throw new Error(`${route} title must equal "${expectedTitle}"; found "${title}".`);
   }

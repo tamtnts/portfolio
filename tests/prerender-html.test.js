@@ -11,9 +11,15 @@ const home = {
   ogImage,
 };
 const project = {
-  route: '/projects/fleet-operations-management-platform',
-  title: 'Fleet Operations Management Platform - Case Study | Nguyen Thanh Tam',
-  canonical: `${siteUrl}/projects/fleet-operations-management-platform`,
+  route: '/projects/fleet-operations-core',
+  title: 'Fleet Operations Core - Case Study | Nguyen Thanh Tam',
+  canonical: `${siteUrl}/projects/fleet-operations-core`,
+  ogImage,
+};
+const encodedProject = {
+  route: '/projects/fleet-administration-dispatch',
+  title: 'Fleet Administration & Dispatch - Case Study | Nguyen Thanh Tam',
+  canonical: `${siteUrl}/projects/fleet-administration-dispatch`,
   ogImage,
 };
 
@@ -26,12 +32,24 @@ function fixture(metadata) {
     <meta property="og:url" content="${metadata.canonical}">
     <meta property="og:image" content="${metadata.ogImage}">
     <script src="/portfolio/assets/index.js"></script>
-  </head><body><a href="/portfolio/projects/fleetops-data-hub">Project</a></body></html>`;
+  </head><body><a href="/portfolio/projects/fleet-data-intelligence-hub">Project</a></body></html>`;
 }
 
 test('accepts valid home and project prerendered metadata', () => {
   assert.doesNotThrow(() => validatePrerenderedHtml(fixture(home), home, '/portfolio/'));
   assert.doesNotThrow(() => validatePrerenderedHtml(fixture(project), project, '/portfolio/'));
+});
+
+test('accepts HTML-encoded title and og:title metadata', () => {
+  const encodedHtml = fixture(encodedProject).replaceAll('&', '&amp;');
+
+  assert.doesNotThrow(() => validatePrerenderedHtml(encodedHtml, encodedProject, '/portfolio/'));
+});
+
+test('accepts numeric character references in title and og:title metadata', () => {
+  const encodedHtml = fixture(encodedProject).replaceAll('&', '&#38;');
+
+  assert.doesNotThrow(() => validatePrerenderedHtml(encodedHtml, encodedProject, '/portfolio/'));
 });
 
 test('rejects a project artifact that retains the homepage title', () => {
