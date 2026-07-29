@@ -35,7 +35,6 @@ test('architecture preview buttons have project-specific accessible names', asyn
 
   assert.match(card, /aria-label=\{`Preview the \$\{project\.title\} architecture`\}/);
   assert.match(card, />\s*Preview Architecture\s*</);
-  assert.match(card, /break-words text-base[^'"]*sm:text-xl/);
 });
 
 test('Mermaid rendering distinguishes loading from failure', async () => {

@@ -5,7 +5,7 @@ export default function ProjectCard({ project, index = 0, onOpenDiagram }) {
     <article className='project-card group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-panel'>
       <div className='flex items-center justify-between border-b border-border px-6 py-4'>
         <span className='font-mono text-[10px] uppercase tracking-[0.2em] text-accent'>
-          Case study / 0{index + 1}
+          {project.serviceLabel ?? `Case study / 0${index + 1}`}
         </span>
         <span className='rounded-full border border-border px-2.5 py-1 font-mono text-[9px] uppercase tracking-wider text-muted'>
           NDA-safe
@@ -28,19 +28,15 @@ export default function ProjectCard({ project, index = 0, onOpenDiagram }) {
           ))}
         </div>
 
-        {project.scaling && (
-          <div className='mt-6 grid grid-cols-3 gap-2 border-t border-white/5 pt-4'>
-            {Object.entries(project.scaling).slice(0, 3).map(([key, value]) => (
-              <div key={key} className='min-w-0'>
-                <div className='break-words text-base font-black text-white sm:text-xl'>
-                  {value.split(' ')[0]}
-                </div>
-                <div className='mt-1 break-words text-[10px] uppercase tracking-wide text-muted/60'>
-                  {key.replace(/([A-Z])/g, ' $1').trim()}
-                </div>
-              </div>
+        {project.highlights?.length > 0 && (
+          <ul className='mt-6 grid gap-2 border-t border-white/5 pt-4 text-xs leading-5 text-muted'>
+            {project.highlights.map((highlight) => (
+              <li key={highlight} className='flex gap-2 break-words'>
+                <span className='text-accent' aria-hidden='true'>→</span>
+                <span>{highlight}</span>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
 
         <div className='mt-auto grid grid-cols-2 gap-3 pt-7'>

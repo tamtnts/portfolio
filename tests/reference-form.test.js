@@ -55,13 +55,13 @@ test('large project pages render the complete approved case-study form', async (
   assert.match(detail, /Project not found/);
 });
 
-test('project cards expose metrics, detail navigation, and architecture preview', async () => {
+test('project cards expose qualitative highlights, detail navigation, and architecture preview', async () => {
   const [card, section] = await Promise.all([
     source('../src/components/ProjectCard.jsx'),
     source('../src/components/sections/ProjectsSection.jsx'),
   ]);
 
-  assert.match(card, /Object\.entries\(project\.scaling\)\.slice\(0, 3\)/);
+  assert.match(card, /project\.highlights\.map/);
   assert.match(card, /Read Case Study/);
   assert.match(card, /Preview Architecture/);
   assert.match(card, /onOpenDiagram/);
@@ -70,6 +70,25 @@ test('project cards expose metrics, detail navigation, and architecture preview'
   assert.match(section, />Selected Projects<\//);
   assert.doesNotMatch(section, /Foundations and earlier work/);
   assert.doesNotMatch(section, /Academic and internship work that shaped my database, API, testing, and delivery fundamentals/);
+});
+
+test('homepage presents the three services as one connected platform', async () => {
+  const [section, overview, card, platformData] = await Promise.all([
+    source('../src/components/sections/ProjectsSection.jsx'),
+    source('../src/components/FleetPlatformOverview.jsx'),
+    source('../src/components/ProjectCard.jsx'),
+    source('../src/data/fleetPlatform.js'),
+  ]);
+
+  assert.match(section, /FleetPlatformOverview/);
+  assert.match(section, /lg:grid-cols-3/);
+  assert.match(overview, /MermaidDiagram/);
+  assert.match(platformData, /Fleet Operations Platform/);
+  assert.match(platformData, /Fleet Administration & Dispatch/);
+  assert.match(platformData, /Fleet Data Intelligence Hub/);
+  assert.match(card, /project\.serviceLabel/);
+  assert.match(card, /project\.highlights/);
+  assert.doesNotMatch(card, /project\.scaling/);
 });
 
 test('homepage uses the compact reference geometry and approved anchors', async () => {
