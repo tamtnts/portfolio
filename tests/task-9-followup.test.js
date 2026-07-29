@@ -22,7 +22,7 @@ test('route changes restore the correct top or home-anchor position', async () =
 });
 
 test('personal contributions exclude project-level mechanisms without confirmed attribution', () => {
-  const project = projects.find(({ slug }) => slug === 'fleet-operations-management-platform');
+  const project = projects.find(({ slug }) => slug === 'fleet-operations-core');
   const contributions = project.contributions.join(' ');
 
   assert.match(contributions, /Redis/i);

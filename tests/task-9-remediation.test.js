@@ -5,7 +5,7 @@ import { projects } from '../src/data/projects.js';
 
 const source = (path) => readFile(new URL(path, import.meta.url), 'utf8');
 
-test('project-card delivery highlights wrap without ellipsis', async () => {
+test('project-card qualitative highlights wrap without ellipsis', async () => {
   const card = await source('../src/components/ProjectCard.jsx');
 
   assert.doesNotMatch(card, /\btruncate\b/);
@@ -28,18 +28,9 @@ test('Mermaid diagram gives the transform viewport and SVG the available width',
   assert.doesNotMatch(diagram, /min-w-max|max-w-none/);
 });
 
-test('first case study publishes only approved API scope and neutral evidence concepts', () => {
-  const project = projects.find(({ slug }) => slug === 'fleet-operations-management-platform');
+test('Operations Core publishes qualitative workflow and integration concepts', () => {
+  const project = projects.find(({ slug }) => slug === 'fleet-operations-core');
   const projectText = JSON.stringify(project);
-  const publicFigures = Object.values(project.scaling);
-
-  assert.deepEqual(publicFigures, [
-    '~40 lookup APIs',
-    '~20 statistics APIs',
-    '~15 document/export APIs',
-  ]);
-  assert.match(project.contributions.join(' '), /~40 lookup APIs.*~20 statistics APIs.*~15 document\/export APIs/);
-  assert.doesNotMatch(projectText, /callback|pending[- ](?:result|state)|object storage|api gateway/i);
 
   for (const concept of [
     /workflow/i,
@@ -50,18 +41,15 @@ test('first case study publishes only approved API scope and neutral evidence co
     /Kafka/,
     /Elasticsearch/,
     /document/i,
-    /spreadsheet/i,
-    /validation/i,
-    /retry/i,
-    /fallback/i,
-    /distributed lock/i,
   ]) {
     assert.match(projectText, concept);
   }
+
+  assert.doesNotMatch(projectText, /~?\d+\s*apis?/i);
 });
 
 test('first case study rejects private evidence fingerprints and source-level identifiers', () => {
-  const project = projects.find(({ slug }) => slug === 'fleet-operations-management-platform');
+  const project = projects.find(({ slug }) => slug === 'fleet-operations-core');
   const projectText = JSON.stringify(project);
 
   assert.doesNotMatch(projectText, /\b[a-z]:\\/i);
