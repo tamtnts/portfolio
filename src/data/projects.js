@@ -34,6 +34,123 @@ function buildContainerDiagram(currentId) {
   ].join('\n');
 }
 
+function buildContainerAccessibility(currentService) {
+  return {
+    elements: [
+      'Operations Client',
+      'Administration Client',
+      'Fleet Operations Core service',
+      'Fleet Administration & Dispatch service',
+      'Fleet Data Intelligence Hub service',
+      'Kafka event broker',
+      'Operational Relational Store',
+      'Operational Redis cache',
+      'Administration Relational Store',
+      'Administration Redis cache',
+      'Read Data Store',
+      'MongoDB document store',
+      'Elasticsearch search index',
+    ],
+    relationships: [
+      'The Operations Client calls Fleet Operations Core through REST or gRPC.',
+      'The Administration Client calls Fleet Administration & Dispatch through REST or gRPC.',
+      'Fleet Administration & Dispatch supplies plans, resources, and configuration to Fleet Operations Core through REST or gRPC.',
+      'Fleet Operations Core requests lookup and search data from Fleet Data Intelligence Hub through REST or gRPC.',
+      'Fleet Administration & Dispatch requests aggregated lookup data from Fleet Data Intelligence Hub through REST or gRPC.',
+      'Fleet Operations Core publishes operational events to Kafka.',
+      'Fleet Administration & Dispatch publishes reference and coordination events to Kafka.',
+      'Kafka delivers synchronization events to Fleet Data Intelligence Hub.',
+      'Fleet Operations Core uses the Operational Relational Store and Operational Redis cache.',
+      'Fleet Administration & Dispatch uses the Administration Relational Store and Administration Redis cache.',
+      'Fleet Data Intelligence Hub uses the Read Data Store, MongoDB document store, and Elasticsearch search index.',
+    ],
+    currentService: `Current highlighted service: ${currentService}.`,
+  };
+}
+
+const operationsComponentAccessibility = {
+  elements: [
+    'REST and gRPC API',
+    'Workflow and Query Use Cases',
+    'Persistence Adapter',
+    'Cache Adapter',
+    'Service Integration Adapters',
+    'Event Adapter',
+    'Document Renderer',
+    'Relational Store',
+    'Redis',
+    'Related Platform Services',
+    'Kafka',
+  ],
+  relationships: [
+    'The REST and gRPC API delegates requests to Workflow and Query Use Cases.',
+    'Workflow and Query Use Cases coordinate the Persistence Adapter, Cache Adapter, Service Integration Adapters, Event Adapter, and Document Renderer.',
+    'The Persistence Adapter accesses the Relational Store.',
+    'The Cache Adapter accesses Redis.',
+    'Service Integration Adapters call Related Platform Services through REST or gRPC.',
+    'The Event Adapter publishes events through Kafka.',
+  ],
+};
+
+const administrationComponentAccessibility = {
+  elements: [
+    'REST and gRPC API',
+    'Planning and Coordination Use Cases',
+    'Resource and Device Use Cases',
+    'Configuration and Reference Use Cases',
+    'Persistence Adapter',
+    'Cache and Coordination Adapter',
+    'Service Integration Adapters',
+    'Event Adapter',
+    'Report and Export Renderer',
+    'Relational Store',
+    'Redis and ShedLock',
+    'Related Platform Services',
+    'Kafka',
+  ],
+  relationships: [
+    'The REST and gRPC API delegates to planning and coordination, resource and device, and configuration and reference use cases.',
+    'All three use-case groups access the Persistence Adapter.',
+    'Planning and Coordination Use Cases and Resource and Device Use Cases access the Cache and Coordination Adapter.',
+    'Configuration and Reference Use Cases access Service Integration Adapters.',
+    'Planning and Coordination Use Cases access the Event Adapter and Report and Export Renderer.',
+    'The Persistence Adapter accesses the Relational Store.',
+    'The Cache and Coordination Adapter accesses Redis and ShedLock.',
+    'Service Integration Adapters call Related Platform Services through REST or gRPC.',
+    'The Event Adapter publishes events through Kafka.',
+  ],
+};
+
+const intelligenceComponentAccessibility = {
+  elements: [
+    'Kafka',
+    'Kafka Consumers',
+    'Approved Source Systems',
+    'Integration Adapters',
+    'Synchronization Workers',
+    'Normalization and Mapping',
+    'Data Repositories',
+    'Search Adapter',
+    'Integration State Tracking',
+    'REST and gRPC Lookup API',
+    'Query and Aggregation Services',
+    'Relational Read Data',
+    'MongoDB',
+    'Elasticsearch',
+  ],
+  relationships: [
+    'Kafka delivers events to Kafka Consumers.',
+    'Approved Source Systems call Integration Adapters through REST or gRPC.',
+    'Kafka Consumers and Integration Adapters supply Synchronization Workers.',
+    'Synchronization Workers delegate to Normalization and Mapping.',
+    'Normalization and Mapping updates Data Repositories, the Search Adapter, and Integration State Tracking.',
+    'The REST and gRPC Lookup API delegates requests to Query and Aggregation Services.',
+    'Query and Aggregation Services use Data Repositories and the Search Adapter.',
+    'Data Repositories access Relational Read Data and MongoDB.',
+    'The Search Adapter accesses Elasticsearch.',
+  ],
+};
+
 const operationsComponentDiagram = [
   'flowchart LR',
   '  API[REST/gRPC API] --> UseCases[Workflow and Query Use Cases]',
@@ -119,12 +236,14 @@ export const projects = [
         description: 'The service within the generalized Fleet Operations Platform container topology.',
         currentId: 'Core',
         code: buildContainerDiagram('Core'),
+        accessibility: buildContainerAccessibility('Fleet Operations Core'),
       },
       component: {
         level: 'C3',
         title: 'Component View',
         description: 'Generalized internal components and their primary responsibilities.',
         code: operationsComponentDiagram,
+        accessibility: operationsComponentAccessibility,
       },
     },
     mainFlow: [
@@ -198,12 +317,14 @@ export const projects = [
         description: 'The service within the generalized Fleet Operations Platform container topology.',
         currentId: 'Admin',
         code: buildContainerDiagram('Admin'),
+        accessibility: buildContainerAccessibility('Fleet Administration & Dispatch'),
       },
       component: {
         level: 'C3',
         title: 'Component View',
         description: 'Generalized internal components and their primary responsibilities.',
         code: administrationComponentDiagram,
+        accessibility: administrationComponentAccessibility,
       },
     },
     mainFlow: [
@@ -277,12 +398,14 @@ export const projects = [
         description: 'The service within the generalized Fleet Operations Platform container topology.',
         currentId: 'Data',
         code: buildContainerDiagram('Data'),
+        accessibility: buildContainerAccessibility('Fleet Data Intelligence Hub'),
       },
       component: {
         level: 'C3',
         title: 'Component View',
         description: 'Generalized internal components and their primary responsibilities.',
         code: intelligenceComponentDiagram,
+        accessibility: intelligenceComponentAccessibility,
       },
     },
     mainFlow: [

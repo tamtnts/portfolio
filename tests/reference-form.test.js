@@ -32,6 +32,49 @@ test('diagram runtime is installed and accessible controls are implemented', asy
   assert.match(modal, /aria-modal=['"]true['"]/);
 });
 
+test('C4 diagrams expose semantic screen-reader summaries through stable descriptions', async () => {
+  const [diagram, c4Model, overview, summary, modal, projectsSection] = await Promise.all([
+    source('../src/components/MermaidDiagram.jsx'),
+    source('../src/components/C4Model.jsx'),
+    source('../src/components/FleetPlatformOverview.jsx'),
+    source('../src/components/C4DiagramSummary.jsx').catch(() => ''),
+    source('../src/components/DiagramModal.jsx'),
+    source('../src/components/sections/ProjectsSection.jsx'),
+  ]);
+
+  assert.match(diagram, /descriptionId/);
+  assert.match(diagram, /aria-describedby=\{descriptionId\}/);
+  assert.match(summary, /<section/);
+  assert.match(summary, /className=['"]sr-only['"]/);
+  assert.match(summary, /accessibility\.elements\.map/);
+  assert.match(summary, /accessibility\.relationships\.map/);
+  assert.match(summary, /accessibility\.currentService/);
+
+  assert.match(c4Model, /C4DiagramSummary/);
+  assert.match(c4Model, /data-c4-level=\{diagram\.level\}/);
+  assert.match(c4Model, /c4-\$\{diagram\.level\.toLowerCase\(\)\}-summary/);
+  assert.match(c4Model, /descriptionId=\{descriptionId\}/);
+
+  assert.match(overview, /C4DiagramSummary/);
+  assert.match(overview, /data-c4-level=\{context\.level\}/);
+  assert.match(overview, /fleet-platform-c1-summary/);
+  assert.match(overview, /descriptionId=\{descriptionId\}/);
+
+  assert.match(projectsSection, /diagram:\s*container/);
+  assert.match(projectsSection, /diagram=\{modal\.diagram\}/);
+  assert.match(modal, /C4DiagramSummary/);
+  assert.match(modal, /diagram-preview-\$\{diagram\.level\.toLowerCase\(\)\}-summary/);
+  assert.match(modal, /descriptionId=\{descriptionId\}/);
+});
+
+test('Mermaid diagrams expose deterministic loading error and ready states', async () => {
+  const diagram = await source('../src/components/MermaidDiagram.jsx');
+
+  assert.match(diagram, /data-diagram-status=['"]loading['"]/);
+  assert.match(diagram, /data-diagram-status=['"]error['"]/);
+  assert.match(diagram, /data-diagram-status=['"]ready['"]/);
+});
+
 test('large project pages render the complete approved case-study form', async () => {
   const detail = await source('../src/pages/ProjectDetail.jsx');
   for (const heading of [
@@ -110,6 +153,8 @@ test('homepage presents the three services as one connected platform', async () 
   assert.match(card, /project\.serviceLabel/);
   assert.match(card, /project\.highlights/);
   assert.doesNotMatch(card, /project\.scaling/);
+  assert.match(overview, /\\u2014/);
+  assert.doesNotMatch(overview, /Ã|â/);
 });
 
 test('homepage uses the compact reference geometry and approved anchors', async () => {

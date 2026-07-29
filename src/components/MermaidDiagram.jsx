@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 import { renderMermaid } from '../lib/mermaid';
 
-export default function MermaidDiagram({ code, title, className = '' }) {
+export default function MermaidDiagram({ code, title, descriptionId, className = '' }) {
   const [renderState, setRenderState] = useState({
     code,
     status: 'loading',
@@ -30,7 +30,7 @@ export default function MermaidDiagram({ code, title, className = '' }) {
 
   if (renderState.code !== code || renderState.status === 'loading') {
     return (
-      <div role='status' className='rounded-xl border border-border bg-white/5 p-3 font-mono text-xs text-muted'>
+      <div data-diagram-status='loading' role='status' className='rounded-xl border border-border bg-white/5 p-3 font-mono text-xs text-muted'>
         Rendering architecture diagram...
       </div>
     );
@@ -38,14 +38,14 @@ export default function MermaidDiagram({ code, title, className = '' }) {
 
   if (renderState.status === 'error') {
     return (
-      <div role='alert' className='rounded-xl border border-border bg-white/5 p-3 font-mono text-xs text-muted'>
+      <div data-diagram-status='error' role='alert' className='rounded-xl border border-border bg-white/5 p-3 font-mono text-xs text-muted'>
         Architecture diagram could not be rendered.
       </div>
     );
   }
 
   return (
-    <div className={`overflow-hidden rounded-xl border border-border bg-bg/60 ${className}`.trim()}>
+    <div data-diagram-status='ready' className={`overflow-hidden rounded-xl border border-border bg-bg/60 ${className}`.trim()}>
       <TransformWrapper
         minScale={0.5}
         maxScale={4}
@@ -72,6 +72,7 @@ export default function MermaidDiagram({ code, title, className = '' }) {
               <div
                 role='img'
                 aria-label={title}
+                aria-describedby={descriptionId}
                 className='w-full max-w-full overflow-hidden p-4 [&_svg]:!h-auto [&_svg]:!w-full [&_svg]:!max-w-full'
                 dangerouslySetInnerHTML={{ __html: renderState.svg }}
               />

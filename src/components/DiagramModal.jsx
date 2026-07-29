@@ -1,11 +1,15 @@
 import { useEffect, useId, useRef } from 'react';
+import C4DiagramSummary from './C4DiagramSummary';
 import MermaidDiagram from './MermaidDiagram';
 
-export default function DiagramModal({ open, title, code, onClose }) {
+export default function DiagramModal({ open, title, code, diagram, onClose }) {
   const previousFocus = useRef(null);
   const closeButtonRef = useRef(null);
   const dialogRef = useRef(null);
   const headingId = useId();
+  const descriptionId = diagram
+    ? `diagram-preview-${diagram.level.toLowerCase()}-summary`
+    : undefined;
 
   useEffect(() => {
     if (!open) return undefined;
@@ -67,7 +71,8 @@ export default function DiagramModal({ open, title, code, onClose }) {
             Close
           </button>
         </div>
-        <MermaidDiagram code={code} title={title} />
+        {diagram && <C4DiagramSummary id={descriptionId} diagram={diagram} />}
+        <MermaidDiagram code={code} title={title} descriptionId={descriptionId} />
       </section>
     </div>
   );

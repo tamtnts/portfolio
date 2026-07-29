@@ -14,6 +14,7 @@ export default function ProjectsSection() {
     open: false,
     title: '',
     code: '',
+    diagram: null,
   });
 
   const openDiagram = (project) => {
@@ -22,6 +23,7 @@ export default function ProjectsSection() {
       open: true,
       title: `${container.level} \u2014 ${project.title}: ${container.title}`,
       code: container.code,
+      diagram: container,
     });
   };
 
@@ -78,6 +80,7 @@ export default function ProjectsSection() {
         open={modal.open}
         title={modal.title}
         code={modal.code}
+        diagram={modal.diagram}
         onClose={() => setModal((current) => ({ ...current, open: false }))}
       />
     </section>

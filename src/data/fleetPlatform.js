@@ -13,13 +13,27 @@ const systemContextDiagram = [
 export const fleetPlatform = {
   name: 'Fleet Operations Platform',
   summary: 'Three connected backend services separate operational workflows, administration and dispatch, and read-oriented data intelligence.',
-  disclaimer: 'The system boundary and relationships are generalized for confidentiality and do not reproduce a private production topology.',
+  disclaimer: 'Names, boundaries, and relationships are generalized and anonymized for confidentiality.',
   c4: {
     context: {
       level: 'C1',
       title: 'System Context',
       description: 'People and approved external systems interacting with the Fleet Operations Platform.',
       code: systemContextDiagram,
+      accessibility: {
+        elements: [
+          'Fleet Operations Staff (person)',
+          'Administrator / Dispatcher (person)',
+          'Fleet Operations Platform (software system)',
+          'Approved Operational Data Sources (external system)',
+        ],
+        relationships: [
+          'Fleet Operations Staff use the Fleet Operations Platform for workflow, lookup, and reporting.',
+          'Administrators and dispatchers use the Fleet Operations Platform for planning, resources, and coordination.',
+          'The Fleet Operations Platform sends REST or gRPC requests and approved events to Approved Operational Data Sources.',
+          'Approved Operational Data Sources return approved responses or events to the Fleet Operations Platform.',
+        ],
+      },
     },
   },
 };

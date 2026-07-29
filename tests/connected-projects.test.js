@@ -9,6 +9,17 @@ const expectedProjects = [
   ['fleet-data-intelligence-hub', 'Fleet Data Intelligence Hub', 'Service 03 / Data Intelligence'],
 ];
 
+function assertAccessibleDiagram(diagram) {
+  assert.ok(diagram.accessibility, `${diagram.level} accessibility content is missing`);
+  assert.ok(Array.isArray(diagram.accessibility.elements));
+  assert.ok(diagram.accessibility.elements.length > 0);
+  assert.ok(diagram.accessibility.elements.every((element) => typeof element === 'string' && element.length > 0));
+  assert.ok(Array.isArray(diagram.accessibility.relationships));
+  assert.ok(diagram.accessibility.relationships.length > 0);
+  assert.ok(diagram.accessibility.relationships.every((relationship) => typeof relationship === 'string' && relationship.length > 0));
+  assert.equal(diagram.accessibility.code, undefined);
+}
+
 test('publishes three connected fleet-platform services', () => {
   assert.deepEqual(
     projects.map(({ slug, title, serviceLabel }) => [slug, title, serviceLabel]),
@@ -65,4 +76,43 @@ test('publishes only approved contribution themes', () => {
   assert.match(operations, /REST|gRPC|Redis|Kafka|document/i);
   assert.match(administration, /API|database|Redis|Kafka|gRPC/i);
   assert.match(intelligence, /worker|lookup|Elasticsearch|Kafka|gRPC/i);
+});
+
+test('publishes structured accessible content for every C1 C2 and C3 diagram', () => {
+  assertAccessibleDiagram(fleetPlatform.c4.context);
+
+  for (const project of projects) {
+    assertAccessibleDiagram(project.c4.container);
+    assertAccessibleDiagram(project.c4.component);
+  }
+});
+
+test('identifies the current highlighted service in every C2 accessible summary', () => {
+  for (const project of projects) {
+    assert.equal(
+      project.c4.container.accessibility?.currentService,
+      `Current highlighted service: ${project.title}.`,
+    );
+  }
+});
+
+test('keeps accessible C4 content generalized and free of Mermaid source', () => {
+  const summaries = JSON.stringify([
+    fleetPlatform.c4.context.accessibility,
+    ...projects.flatMap((project) => [
+      project.c4.container.accessibility,
+      project.c4.component.accessibility,
+    ]),
+  ]);
+
+  assert.doesNotMatch(summaries, /flowchart|-->|classDef|\bclass\s+\w+\s+current/i);
+  assert.doesNotMatch(summaries, /\b[a-z]:\\|src\/(?:main|test)|localhost|private network|consumer group/i);
+});
+
+test('shared confidentiality copy explicitly anonymizes names boundaries and relationships', () => {
+  assert.match(fleetPlatform.disclaimer, /names/i);
+  assert.match(fleetPlatform.disclaimer, /boundaries/i);
+  assert.match(fleetPlatform.disclaimer, /relationships/i);
+  assert.match(fleetPlatform.disclaimer, /generalized/i);
+  assert.match(fleetPlatform.disclaimer, /anonymized/i);
 });
