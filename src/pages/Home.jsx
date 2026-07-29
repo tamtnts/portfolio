@@ -9,10 +9,10 @@ import StackSection from '../components/sections/StackSection';
 import Container from '../components/Container';
 import { profile } from '../data/profile';
 
-const title = 'Nguyen Thanh Tam - Java Backend Developer';
+const title = 'Nguyen Thanh Tam - Middle Backend Developer';
 const siteUrl = 'https://tamtnts.github.io/portfolio';
 const description =
-  'Portfolio of Nguyen Thanh Tam, a Java Backend Developer building maintainable REST APIs, data services, and backend integrations.';
+  'Portfolio of Nguyen Thanh Tam, a Middle Backend Developer building maintainable REST APIs, data services, and backend integrations.';
 
 export default function Home() {
   const personSchema = {

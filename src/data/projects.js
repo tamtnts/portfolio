@@ -34,7 +34,7 @@ export const projects = [
       'A Java 17 and Spring Boot backend component for operational workflows, multi-source lookup, reporting, and asynchronous event processing.',
     tags: ['Java 17', 'Spring Boot', 'PostgreSQL', 'Redis', 'Kafka', 'gRPC'],
     disclaimer:
-      'The project name, narrative, business rules, data, and topology are generalized. No customer, internal-system, or production details are reproduced.',
+      'Disclaimer: Due to NDA, details are anonymized and metrics are approximate.',
     overview: {
       domain: 'Generalized fleet operations, workflow, lookup, and reporting',
       role: 'Java Backend Developer',
@@ -122,7 +122,7 @@ export const projects = [
       'A backend integration hub that consolidates logistics records for lookup, aggregation, synchronization, and search.',
     tags: ['Java 17', 'Spring Boot', 'Kafka', 'gRPC', 'Redis', 'Elasticsearch'],
     disclaimer:
-      'The business domain and system boundaries are generalized; no customer, partner, or production details are published.',
+      'Disclaimer: Due to NDA, details are anonymized and metrics are approximate.',
     overview: {
       domain: 'Multi-source logistics data integration and search',
       role: 'Java Backend Developer',
