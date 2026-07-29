@@ -37,7 +37,7 @@ export const projects = [
       'Disclaimer: Due to NDA, details are anonymized and metrics are approximate.',
     overview: {
       domain: 'Generalized fleet operations, workflow, lookup, and reporting',
-      role: 'Java Backend Developer',
+      role: 'Middle Backend Developer',
       scale: 'One backend component within a larger service ecosystem; public figures are limited to user-approved delivery scope.',
     },
     requirements: [
@@ -125,7 +125,7 @@ export const projects = [
       'Disclaimer: Due to NDA, details are anonymized and metrics are approximate.',
     overview: {
       domain: 'Multi-source logistics data integration and search',
-      role: 'Java Backend Developer',
+      role: 'Middle Backend Developer',
     },
     requirements: [
       'Consolidate vehicle, journey, delivery-status, and operational-incident records.',

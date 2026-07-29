@@ -27,15 +27,18 @@ export default function HeroSection() {
           <div className="mt-9 flex flex-wrap justify-center gap-3">
             <a className="button-primary" href="#projects">View Case Studies</a>
             <a className="button-secondary" href="#contact">Contact Me</a>
-            {profile.resumeUrl && (
+          </div>
+
+          {profile.resumeUrl && (
+            <div className="mt-3 text-center">
               <a
-                className="button-secondary"
                 href={profile.resumeUrl}
                 target="_blank"
                 rel="noreferrer"
-              >View CV</a>
-            )}
-          </div>
+                className="text-sm text-accent underline hover:text-accent/90"
+              >Review CV</a>
+            </div>
+          )}
 
           <div className="mt-9 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 font-mono text-xs text-muted">
             <span className="flex items-center gap-2">

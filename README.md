@@ -1,6 +1,6 @@
 # Nguyen Thanh Tam Portfolio
 
-Public portfolio for Nguyen Thanh Tam, Java Backend Developer. Built with React, Vite, and Tailwind CSS.
+Public portfolio for Nguyen Thanh Tam, Middle Backend Developer. Built with React, Vite, and Tailwind CSS.
 
 ## Local verification
 
