@@ -2,9 +2,11 @@ import { useState } from 'react';
 import Card from '../Card';
 import Container from '../Container';
 import DiagramModal from '../DiagramModal';
+import FleetPlatformOverview from '../FleetPlatformOverview';
 import ProjectCard from '../ProjectCard';
 import Reveal from '../Reveal';
 import { earlierProjects } from '../../data/earlierProjects';
+import { fleetPlatform } from '../../data/fleetPlatform';
 import { projects } from '../../data/projects';
 
 export default function ProjectsSection() {
@@ -12,13 +14,16 @@ export default function ProjectsSection() {
     open: false,
     title: '',
     code: '',
+    diagram: null,
   });
 
   const openDiagram = (project) => {
+    const container = project.c4.container;
     setModal({
       open: true,
-      title: project.mermaid.title,
-      code: project.mermaid.code,
+      title: `${container.level} \u2014 ${project.title}: ${container.title}`,
+      code: container.code,
+      diagram: container,
     });
   };
 
@@ -31,8 +36,9 @@ export default function ProjectsSection() {
           <p className='mt-3 max-w-2xl text-sm leading-relaxed text-muted'>
             An NDA-safe view of logistics systems I have contributed to, focused on responsibilities, architecture, and engineering decisions.
           </p>
+          <FleetPlatformOverview platform={fleetPlatform} />
         </Reveal>
-        <div className='mt-10 grid gap-5 lg:grid-cols-2'>
+        <div className='mt-10 grid gap-5 lg:grid-cols-3'>
           {projects.map((project, index) => (
             <Reveal key={project.slug}>
               <ProjectCard project={project} index={index} onOpenDiagram={openDiagram} />
@@ -74,6 +80,7 @@ export default function ProjectsSection() {
         open={modal.open}
         title={modal.title}
         code={modal.code}
+        diagram={modal.diagram}
         onClose={() => setModal((current) => ({ ...current, open: false }))}
       />
     </section>

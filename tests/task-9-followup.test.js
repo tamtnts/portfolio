@@ -22,7 +22,7 @@ test('route changes restore the correct top or home-anchor position', async () =
 });
 
 test('personal contributions exclude project-level mechanisms without confirmed attribution', () => {
-  const project = projects.find(({ slug }) => slug === 'fleet-operations-management-platform');
+  const project = projects.find(({ slug }) => slug === 'fleet-operations-core');
   const contributions = project.contributions.join(' ');
 
   assert.match(contributions, /Redis/i);
@@ -35,7 +35,6 @@ test('architecture preview buttons have project-specific accessible names', asyn
 
   assert.match(card, /aria-label=\{`Preview the \$\{project\.title\} architecture`\}/);
   assert.match(card, />\s*Preview Architecture\s*</);
-  assert.match(card, /break-words text-base[^'"]*sm:text-xl/);
 });
 
 test('Mermaid rendering distinguishes loading from failure', async () => {

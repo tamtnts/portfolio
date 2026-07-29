@@ -1,3 +1,24 @@
+const NAMED_CHARACTER_REFERENCES = {
+  amp: '&',
+  apos: "'",
+  gt: '>',
+  lt: '<',
+  quot: '"',
+};
+
+function decodeHtmlCharacterReferences(value) {
+  return value.replace(/&(?:(#x[0-9a-f]+)|(#\d+)|(amp|apos|gt|lt|quot));/gi, (reference, hexadecimal, decimal, named) => {
+    if (named) return NAMED_CHARACTER_REFERENCES[named.toLowerCase()];
+
+    const codePoint = Number.parseInt(
+      hexadecimal ? hexadecimal.slice(2) : decimal.slice(1),
+      hexadecimal ? 16 : 10,
+    );
+    if (codePoint < 0 || codePoint > 0x10ffff) return reference;
+    return String.fromCodePoint(codePoint);
+  });
+}
+
 function tagsWithAttribute(html, tagName, attribute, expectedValue) {
   const tags = html.match(new RegExp(`<${tagName}\\b[^>]*>`, 'gi')) || [];
   return tags.filter((tag) => {
@@ -6,8 +27,14 @@ function tagsWithAttribute(html, tagName, attribute, expectedValue) {
   });
 }
 
+function tagsWithNamedAttribute(html, attribute) {
+  const tags = html.match(/<[a-z][a-z0-9:-]*\b[^>]*>/gi) || [];
+  return tags.filter((tag) => new RegExp(`\\b${attribute}\\s*=`, 'i').test(tag));
+}
+
 function getAttribute(tag, attribute) {
-  return new RegExp(`\\b${attribute}\\s*=\\s*(["'])(.*?)\\1`, 'i').exec(tag)?.[2] || null;
+  const value = new RegExp(`\\b${attribute}\\s*=\\s*(["'])(.*?)\\1`, 'i').exec(tag)?.[2];
+  return value ? decodeHtmlCharacterReferences(value) : null;
 }
 
 function requireExactlyOne(tags, description, route) {
@@ -18,9 +45,17 @@ function requireExactlyOne(tags, description, route) {
 }
 
 export function validatePrerenderedHtml(html, expectedMetadata, configuredBasePath) {
-  const { route, title: expectedTitle, canonical: expectedCanonical, ogImage: expectedOgImage } = expectedMetadata;
+  const {
+    route,
+    title: expectedTitle,
+    canonical: expectedCanonical,
+    ogImage: expectedOgImage,
+    c4Levels: expectedC4Levels,
+  } = expectedMetadata;
   const titleTags = html.match(/<title\b[^>]*>[\s\S]*?<\/title>/gi) || [];
-  const title = requireExactlyOne(titleTags, 'title', route).replace(/<[^>]+>/g, '');
+  const title = decodeHtmlCharacterReferences(
+    requireExactlyOne(titleTags, 'title', route).replace(/<[^>]+>/g, ''),
+  );
   if (title !== expectedTitle) {
     throw new Error(`${route} title must equal "${expectedTitle}"; found "${title}".`);
   }
@@ -46,6 +81,35 @@ export function validatePrerenderedHtml(html, expectedMetadata, configuredBasePa
   }
   if (getAttribute(ogImage, 'content') !== expectedOgImage) {
     throw new Error(`${route} og:image must equal "${expectedOgImage}".`);
+  }
+
+  const diagramTags = tagsWithNamedAttribute(html, 'data-diagram-status');
+  const diagramStatuses = diagramTags.map((tag) => getAttribute(tag, 'data-diagram-status'));
+  const readyDiagramCount = diagramStatuses.filter((status) => status === 'ready').length;
+  if (
+    diagramTags.length !== expectedC4Levels.length ||
+    readyDiagramCount !== expectedC4Levels.length
+  ) {
+    const statusSummary = diagramStatuses.length > 0 ? diagramStatuses.join(', ') : 'none';
+    throw new Error(
+      `${route} must emit exactly ${expectedC4Levels.length} ready diagrams; ` +
+      `found ${readyDiagramCount} ready diagrams across ${diagramTags.length} status markers (${statusSummary}).`,
+    );
+  }
+
+  const c4LevelTags = tagsWithNamedAttribute(html, 'data-c4-level');
+  for (const expectedLevel of expectedC4Levels) {
+    const count = c4LevelTags.filter(
+      (tag) => getAttribute(tag, 'data-c4-level') === expectedLevel,
+    ).length;
+    if (count !== 1) {
+      throw new Error(`${route} must emit exactly one C4 level ${expectedLevel} marker; found ${count}.`);
+    }
+  }
+  if (c4LevelTags.length !== expectedC4Levels.length) {
+    throw new Error(
+      `${route} must emit exactly ${expectedC4Levels.length} C4 level markers; found ${c4LevelTags.length}.`,
+    );
   }
 
   for (const [attribute, key] of [

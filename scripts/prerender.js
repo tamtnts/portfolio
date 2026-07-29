@@ -23,8 +23,9 @@ const viteIndexShell = readFileSync(resolve(distDir, 'index.html'), 'utf8');
 
 const ROUTES = [
   '/',
-  '/projects/fleet-operations-management-platform',
-  '/projects/fleetops-data-hub',
+  '/projects/fleet-operations-core',
+  '/projects/fleet-administration-dispatch',
+  '/projects/fleet-data-intelligence-hub',
 ];
 
 const MIME_TYPES = {
@@ -46,6 +47,7 @@ function expectedMetadataForRoute(route) {
       title: `${profile.name} - ${profile.role}`,
       canonical: `${siteUrl}/`,
       ogImage: `${siteUrl}/og.svg`,
+      c4Levels: ['C1'],
     };
   }
 
@@ -57,7 +59,53 @@ function expectedMetadataForRoute(route) {
     title: `${project.title} - Case Study | ${profile.name}`,
     canonical: `${siteUrl}/projects/${project.slug}`,
     ogImage: `${siteUrl}/og.svg`,
+    c4Levels: ['C1', 'C2', 'C3'],
   };
+}
+
+async function waitForExpectedDiagrams(page, expectedMetadata) {
+  const expectedDiagramCount = expectedMetadata.c4Levels.length;
+
+  try {
+    await page.waitForFunction(
+      (expectedCount) => {
+        const statuses = [...document.querySelectorAll('[data-diagram-status]')]
+          .map((element) => element.getAttribute('data-diagram-status'));
+        return statuses.includes('error') || (
+          statuses.length === expectedCount &&
+          statuses.every((status) => status === 'ready')
+        );
+      },
+      expectedDiagramCount,
+      { timeout: 15_000 },
+    );
+  } catch (error) {
+    const statuses = await page.locator('[data-diagram-status]').evaluateAll(
+      (elements) => elements.map((element) => element.getAttribute('data-diagram-status')),
+    );
+    const statusSummary = statuses.length > 0 ? statuses.join(', ') : 'none';
+    throw new Error(
+      `${expectedMetadata.route} expected ${expectedDiagramCount} diagrams to become ready; ` +
+      `found ${statuses.length} status markers (${statusSummary}).`,
+      { cause: error },
+    );
+  }
+
+  const statuses = await page.locator('[data-diagram-status]').evaluateAll(
+    (elements) => elements.map((element) => element.getAttribute('data-diagram-status')),
+  );
+  if (statuses.includes('error')) {
+    throw new Error(`${expectedMetadata.route} diagram rendering reported an explicit error state.`);
+  }
+  if (
+    statuses.length !== expectedDiagramCount ||
+    statuses.some((status) => status !== 'ready')
+  ) {
+    throw new Error(
+      `${expectedMetadata.route} expected exactly ${expectedDiagramCount} ready diagrams; ` +
+      `found ${statuses.join(', ') || 'none'}.`,
+    );
+  }
 }
 
 function serve(req, res) {
@@ -140,9 +188,10 @@ async function prerender() {
             await page.addInitScript(() => {
               window.__PRERENDER__ = true;
             });
+            const expectedMetadata = expectedMetadataForRoute(route);
             const pageUrl = toPrerenderUrl(route, basePath);
             await page.goto(`http://127.0.0.1:${PORT}${pageUrl}`, { waitUntil: 'networkidle' });
-            await page.waitForTimeout(1500);
+            await waitForExpectedDiagrams(page, expectedMetadata);
 
             const html = await page.evaluate(() => {
               const selectors = [
@@ -174,7 +223,7 @@ async function prerender() {
               return document.documentElement.outerHTML;
             });
 
-            validatePrerenderedHtml(html, expectedMetadataForRoute(route), basePath);
+            validatePrerenderedHtml(html, expectedMetadata, basePath);
             const outPath = route === '/'
               ? resolve(distDir, 'index.html')
               : resolve(distDir, route.replace(/^\//, ''), 'index.html');

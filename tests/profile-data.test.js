@@ -19,10 +19,14 @@ test('profile exposes the approved public identity and contact details', () => {
   assert.equal(profile.certifications.length, 4);
 });
 
-test('portfolio publishes two complete NDA-safe case studies', () => {
+test('portfolio publishes three complete NDA-safe connected case studies', () => {
   assert.deepEqual(
     projects.map(({ slug }) => slug),
-    ['fleet-operations-management-platform', 'fleetops-data-hub'],
+    [
+      'fleet-operations-core',
+      'fleet-administration-dispatch',
+      'fleet-data-intelligence-hub',
+    ],
   );
 
   for (const project of projects) {
@@ -37,12 +41,14 @@ test('portfolio publishes two complete NDA-safe case studies', () => {
     assert.ok(project.tags.length >= 5);
     assert.ok(project.requirements.length >= 4);
     assert.ok(project.challenges.length >= 4);
-    assert.ok(project.mermaid.title);
-    assert.match(project.mermaid.code, /^flowchart /);
+    assert.equal(project.c4.container.level, 'C2');
+    assert.match(project.c4.container.code, /^flowchart /);
+    assert.equal(project.c4.component.level, 'C3');
+    assert.match(project.c4.component.code, /^flowchart /);
     assert.ok(project.mainFlow.length >= 5);
     assert.ok(project.contributions.length >= 4);
     assert.ok(project.techStack.length >= 6);
-    assert.ok(Object.keys(project.scaling).length >= 3);
+    assert.equal(project.highlights.length, 3);
     assert.ok(project.reliabilitySecurity.length >= 4);
     assert.ok(project.tradeoffs.length >= 3);
     assert.ok(project.outcome.length >= 2);
@@ -50,23 +56,12 @@ test('portfolio publishes two complete NDA-safe case studies', () => {
   }
 });
 
-test('project one uses only approved delivery counts', () => {
-  const project = projects[0];
-  const publicMetrics = Object.values(project.scaling).join(' ');
-  assert.match(publicMetrics, /~40/);
-  assert.match(publicMetrics, /~20/);
-  assert.match(publicMetrics, /~15/);
-  assert.doesNotMatch(publicMetrics, /latency|requests per|users|availability|uptime/i);
-});
+test('case study highlights and contributions contain no quantitative API claims', () => {
+  const publicText = projects
+    .flatMap(({ highlights, contributions }) => [...highlights, ...contributions])
+    .join(' ');
 
-test('project two uses qualitative highlights instead of invented scale', () => {
-  const publicMetrics = Object.values(projects[1].scaling);
-  assert.deepEqual(publicMetrics, [
-    'Multi-source integration',
-    'Event-driven synchronization',
-    'Search-optimized reads',
-  ]);
-  assert.doesNotMatch(publicMetrics.join(' '), /\d/);
+  assert.doesNotMatch(publicText, /~?\d+\s*(?:apis?|ms|%|users?|requests?)/i);
 });
 
 test('profile and selected projects keep the approved counts', () => {
@@ -135,12 +130,23 @@ test('prerender and sitemap expose only approved public routes', async () => {
     'utf8',
   );
 
-  for (const slug of [
+  const approvedSlugs = [
+    'fleet-operations-core',
+    'fleet-administration-dispatch',
+    'fleet-data-intelligence-hub',
+  ];
+
+  for (const slug of approvedSlugs) {
+    assert.match(prerender, new RegExp(`/projects/${slug}`));
+    assert.match(sitemap, new RegExp(`/projects/${slug}`));
+  }
+
+  for (const retiredSlug of [
     'fleet-operations-management-platform',
     'fleetops-data-hub',
   ]) {
-    assert.match(prerender, new RegExp(`/projects/${slug}`));
-    assert.match(sitemap, new RegExp(`/projects/${slug}`));
+    assert.doesNotMatch(prerender, new RegExp(`/projects/${retiredSlug}`));
+    assert.doesNotMatch(sitemap, new RegExp(`/projects/${retiredSlug}`));
   }
   assert.doesNotMatch(prerender, /fleet-operations-platform/);
   assert.doesNotMatch(sitemap, /fleet-operations-platform/);
@@ -172,11 +178,10 @@ test('case studies and publishing assets implement the approved release contract
     'Overview',
     'Requirements',
     'Key Challenges',
-    'Architecture Diagram',
+    'C4 Model',
     'Main Flow',
     'My Contributions',
     'Tech Stack',
-    'Delivery Scope & Highlights',
     'Reliability & Security',
     'Trade-offs / Design Decisions',
     'Outcome / Impact',

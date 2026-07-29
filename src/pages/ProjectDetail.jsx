@@ -1,10 +1,11 @@
 import { Link, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Card from '../components/Card';
+import C4Model from '../components/C4Model';
 import Container from '../components/Container';
-import MermaidDiagram from '../components/MermaidDiagram';
 import Tag from '../components/Tag';
 import NotFoundPage from './NotFoundPage';
+import { fleetPlatform } from '../data/fleetPlatform';
 import { profile } from '../data/profile';
 import { projects } from '../data/projects';
 
@@ -71,6 +72,7 @@ export default function ProjectDetail() {
     );
   }
 
+  const relatedProjects = projects.filter((item) => item.slug !== project.slug);
   const canonicalUrl = `${siteUrl}/projects/${project.slug}`;
 
   return (
@@ -89,7 +91,7 @@ export default function ProjectDetail() {
 
       <Container className='py-12 sm:py-16'>
         <header>
-          <p className='font-mono text-xs uppercase tracking-[0.18em] text-accent'>Case study (NDA-friendly)</p>
+          <p className='font-mono text-xs uppercase tracking-[0.18em] text-accent'>{project.serviceLabel}</p>
           <h1 className='mt-4 text-4xl font-black tracking-tight text-text sm:text-5xl'>{project.title}</h1>
           <p className='mt-4 max-w-3xl text-lg leading-8 text-muted'>{project.subtitle}</p>
           <div className='mt-5 flex flex-wrap gap-2'>
@@ -111,6 +113,7 @@ export default function ProjectDetail() {
                 {project.overview.role && <div><span className='font-mono text-xs'>Role:</span> {project.overview.role}</div>}
                 {project.overview.teamSize && <div><span className='font-mono text-xs'>Team size:</span> {project.overview.teamSize}</div>}
                 {project.overview.scale && <div className='sm:col-span-2'><span className='font-mono text-xs'>Scale:</span> {project.overview.scale}</div>}
+                {project.overview.platform && <div className='sm:col-span-2'><span className='font-mono text-xs'>Platform:</span> {project.overview.platform}</div>}
               </div>
             </Card>
           </Section>
@@ -123,11 +126,12 @@ export default function ProjectDetail() {
             <Card className='p-5'><List items={project.challenges} /></Card>
           </Section>
 
-          <Section title='Architecture Diagram' when={hasContent(project.mermaid?.code)}>
-            <Card className='p-5'>
-              <div className='mb-3 text-sm font-bold text-text'>{project.mermaid.title}</div>
-              <MermaidDiagram title={project.mermaid.title} code={project.mermaid.code} />
-            </Card>
+          <Section title='C4 Model'>
+            <C4Model
+              context={fleetPlatform.c4.context}
+              container={project.c4.container}
+              component={project.c4.component}
+            />
           </Section>
 
           <Section title='Main Flow' when={hasContent(project.mainFlow)}>
@@ -146,16 +150,6 @@ export default function ProjectDetail() {
             </Card>
           </Section>
 
-          <Section title='Delivery Scope & Highlights' when={hasContent(project.scaling)}>
-            <Card className='p-5'>
-              <div className='grid gap-2 text-sm text-muted'>
-                {Object.entries(project.scaling).map(([key, value]) => (
-                  <div key={key}><span className='font-mono text-xs'>{key}:</span> {value}</div>
-                ))}
-              </div>
-            </Card>
-          </Section>
-
           <Section title='Reliability & Security' when={hasContent(project.reliabilitySecurity)}>
             <Card className='p-5'><List items={project.reliabilitySecurity} /></Card>
           </Section>
@@ -170,6 +164,25 @@ export default function ProjectDetail() {
 
           <Section title='Lessons Learned' when={hasContent(project.lessons)}>
             <Card className='p-5'><List items={project.lessons} /></Card>
+          </Section>
+
+          <Section title='Related Platform Services' when={relatedProjects.length > 0}>
+            <div className='grid gap-3 sm:grid-cols-2'>
+              {relatedProjects.map((relatedProject) => (
+                <Link
+                  key={relatedProject.slug}
+                  className='rounded-xl border border-border bg-panel p-5 text-text no-underline transition hover:border-accent/40 hover:bg-white/[0.06]'
+                  to={`/projects/${relatedProject.slug}`}
+                  aria-label={`Read the ${relatedProject.title} case study`}
+                >
+                  <span className='font-mono text-[10px] uppercase tracking-[0.18em] text-accent'>
+                    {relatedProject.serviceLabel}
+                  </span>
+                  <span className='mt-2 block text-lg font-bold'>{relatedProject.title}</span>
+                  <span className='mt-2 block text-sm leading-6 text-muted'>{relatedProject.subtitle}</span>
+                </Link>
+              ))}
+            </div>
           </Section>
         </article>
       </Container>

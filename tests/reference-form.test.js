@@ -32,17 +32,59 @@ test('diagram runtime is installed and accessible controls are implemented', asy
   assert.match(modal, /aria-modal=['"]true['"]/);
 });
 
+test('C4 diagrams expose semantic screen-reader summaries through stable descriptions', async () => {
+  const [diagram, c4Model, overview, summary, modal, projectsSection] = await Promise.all([
+    source('../src/components/MermaidDiagram.jsx'),
+    source('../src/components/C4Model.jsx'),
+    source('../src/components/FleetPlatformOverview.jsx'),
+    source('../src/components/C4DiagramSummary.jsx').catch(() => ''),
+    source('../src/components/DiagramModal.jsx'),
+    source('../src/components/sections/ProjectsSection.jsx'),
+  ]);
+
+  assert.match(diagram, /descriptionId/);
+  assert.match(diagram, /aria-describedby=\{descriptionId\}/);
+  assert.match(summary, /<section/);
+  assert.match(summary, /className=['"]sr-only['"]/);
+  assert.match(summary, /accessibility\.elements\.map/);
+  assert.match(summary, /accessibility\.relationships\.map/);
+  assert.match(summary, /accessibility\.currentService/);
+
+  assert.match(c4Model, /C4DiagramSummary/);
+  assert.match(c4Model, /data-c4-level=\{diagram\.level\}/);
+  assert.match(c4Model, /c4-\$\{diagram\.level\.toLowerCase\(\)\}-summary/);
+  assert.match(c4Model, /descriptionId=\{descriptionId\}/);
+
+  assert.match(overview, /C4DiagramSummary/);
+  assert.match(overview, /data-c4-level=\{context\.level\}/);
+  assert.match(overview, /fleet-platform-c1-summary/);
+  assert.match(overview, /descriptionId=\{descriptionId\}/);
+
+  assert.match(projectsSection, /diagram:\s*container/);
+  assert.match(projectsSection, /diagram=\{modal\.diagram\}/);
+  assert.match(modal, /C4DiagramSummary/);
+  assert.match(modal, /diagram-preview-\$\{diagram\.level\.toLowerCase\(\)\}-summary/);
+  assert.match(modal, /descriptionId=\{descriptionId\}/);
+});
+
+test('Mermaid diagrams expose deterministic loading error and ready states', async () => {
+  const diagram = await source('../src/components/MermaidDiagram.jsx');
+
+  assert.match(diagram, /data-diagram-status=['"]loading['"]/);
+  assert.match(diagram, /data-diagram-status=['"]error['"]/);
+  assert.match(diagram, /data-diagram-status=['"]ready['"]/);
+});
+
 test('large project pages render the complete approved case-study form', async () => {
   const detail = await source('../src/pages/ProjectDetail.jsx');
   for (const heading of [
     'Overview',
     'Requirements',
     'Key Challenges',
-    'Architecture Diagram',
+    'C4 Model',
     'Main Flow',
     'My Contributions',
     'Tech Stack',
-    'Delivery Scope & Highlights',
     'Reliability & Security',
     'Trade-offs / Design Decisions',
     'Outcome / Impact',
@@ -50,26 +92,69 @@ test('large project pages render the complete approved case-study form', async (
   ]) {
     assert.ok(detail.includes(heading), 'Missing heading: ' + heading);
   }
-  assert.match(detail, /MermaidDiagram/);
   assert.match(detail, /if \(!when\) return null/);
   assert.match(detail, /Project not found/);
 });
 
-test('project cards expose metrics, detail navigation, and architecture preview', async () => {
+test('project pages render C1 C2 and C3 vertically with related services', async () => {
+  const [detail, c4Model] = await Promise.all([
+    source('../src/pages/ProjectDetail.jsx'),
+    source('../src/components/C4Model.jsx'),
+  ]);
+
+  assert.match(detail, /fleetPlatform\.c4\.context/);
+  assert.match(detail, /project\.c4\.container/);
+  assert.match(detail, /project\.c4\.component/);
+  assert.match(detail, /relatedProjects/);
+  assert.match(detail, /Related Platform Services/);
+  assert.match(c4Model, /\[context, container, component\]/);
+  assert.match(c4Model, /MermaidDiagram/);
+  assert.doesNotMatch(c4Model, /tab|hidden/i);
+  assert.doesNotMatch(detail, /Delivery Scope & Highlights/);
+});
+
+test('project cards expose qualitative highlights, detail navigation, and architecture preview', async () => {
   const [card, section] = await Promise.all([
     source('../src/components/ProjectCard.jsx'),
     source('../src/components/sections/ProjectsSection.jsx'),
   ]);
 
-  assert.match(card, /Object\.entries\(project\.scaling\)\.slice\(0, 3\)/);
+  assert.match(card, /project\.highlights\.map/);
   assert.match(card, /Read Case Study/);
   assert.match(card, /Preview Architecture/);
   assert.match(card, /onOpenDiagram/);
   assert.match(section, /earlierProjects/);
   assert.match(section, /DiagramModal/);
+  assert.match(section, /project\.c4\.container/);
+  assert.doesNotMatch(section, /project\.mermaid/);
+  assert.match(section, /\\u2014/);
+  assert.doesNotMatch(section, /Ã|â/);
   assert.match(section, />Selected Projects<\//);
   assert.doesNotMatch(section, /Foundations and earlier work/);
   assert.doesNotMatch(section, /Academic and internship work that shaped my database, API, testing, and delivery fundamentals/);
+});
+
+test('homepage presents the three services as one connected platform', async () => {
+  const [section, overview, card, platformData] = await Promise.all([
+    source('../src/components/sections/ProjectsSection.jsx'),
+    source('../src/components/FleetPlatformOverview.jsx'),
+    source('../src/components/ProjectCard.jsx'),
+    source('../src/data/fleetPlatform.js'),
+  ]);
+
+  assert.match(section, /FleetPlatformOverview/);
+  assert.match(section, /lg:grid-cols-3/);
+  assert.match(overview, /MermaidDiagram/);
+  assert.match(overview, /platform\.c4\.context/);
+  assert.match(platformData, /c4/);
+  assert.match(platformData, /context/);
+  assert.match(platformData, /Fleet Operations Platform/);
+  assert.doesNotMatch(platformData, /mermaid/);
+  assert.match(card, /project\.serviceLabel/);
+  assert.match(card, /project\.highlights/);
+  assert.doesNotMatch(card, /project\.scaling/);
+  assert.match(overview, /\\u2014/);
+  assert.doesNotMatch(overview, /Ã|â/);
 });
 
 test('homepage uses the compact reference geometry and approved anchors', async () => {

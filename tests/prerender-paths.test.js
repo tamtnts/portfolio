@@ -15,8 +15,8 @@ test('normalizes Vite base paths and prerender route URLs', () => {
   assert.equal(normalizeBasePath(''), '/');
   assert.equal(toPrerenderUrl('/', '/portfolio/'), '/portfolio/');
   assert.equal(
-    toPrerenderUrl('/projects/fleetops-data-hub', '/portfolio/'),
-    '/portfolio/projects/fleetops-data-hub',
+    toPrerenderUrl('/projects/fleet-data-intelligence-hub', '/portfolio/'),
+    '/portfolio/projects/fleet-data-intelligence-hub',
   );
 });
 
