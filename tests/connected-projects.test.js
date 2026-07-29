@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { projects } from '../src/data/projects.js';
+import { fleetPlatform } from '../src/data/fleetPlatform.js';
 
 const expectedProjects = [
   ['fleet-operations-core', 'Fleet Operations Core', 'Service 01 / Operational Core'],
@@ -25,6 +26,19 @@ test('publishes three connected fleet-platform services', () => {
       assert.match(project.mermaid.code, new RegExp(title.replace('&', '&')));
     }
   }
+});
+
+test('publishes a strict shared C1 System Context view', () => {
+  const context = fleetPlatform.c4.context;
+
+  assert.equal(context.level, 'C1');
+  assert.equal(context.title, 'System Context');
+  assert.match(context.code, /Fleet Operations Staff/);
+  assert.match(context.code, /Administrator \/ Dispatcher/);
+  assert.match(context.code, /Fleet Operations Platform/);
+  assert.match(context.code, /Approved Operational Data Sources/);
+  assert.match(context.code, /REST\/gRPC/);
+  assert.doesNotMatch(context.code, /Fleet Operations Core|Fleet Administration & Dispatch|Fleet Data Intelligence Hub|Kafka|Redis|MongoDB|Elasticsearch/);
 });
 
 test('keeps the three case studies qualitative and NDA-safe', () => {

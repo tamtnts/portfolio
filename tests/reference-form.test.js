@@ -83,9 +83,11 @@ test('homepage presents the three services as one connected platform', async () 
   assert.match(section, /FleetPlatformOverview/);
   assert.match(section, /lg:grid-cols-3/);
   assert.match(overview, /MermaidDiagram/);
+  assert.match(overview, /platform\.c4\.context/);
+  assert.match(platformData, /c4/);
+  assert.match(platformData, /context/);
   assert.match(platformData, /Fleet Operations Platform/);
-  assert.match(platformData, /Fleet Administration & Dispatch/);
-  assert.match(platformData, /Fleet Data Intelligence Hub/);
+  assert.doesNotMatch(platformData, /mermaid/);
   assert.match(card, /project\.serviceLabel/);
   assert.match(card, /project\.highlights/);
   assert.doesNotMatch(card, /project\.scaling/);
