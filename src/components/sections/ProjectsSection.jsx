@@ -20,7 +20,7 @@ export default function ProjectsSection() {
     const container = project.c4.container;
     setModal({
       open: true,
-      title: `${container.level} â€” ${project.title}: ${container.title}`,
+      title: `${container.level} \u2014 ${project.title}: ${container.title}`,
       code: container.code,
     });
   };

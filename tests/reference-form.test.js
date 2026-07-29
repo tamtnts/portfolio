@@ -69,6 +69,8 @@ test('project cards expose qualitative highlights, detail navigation, and archit
   assert.match(section, /DiagramModal/);
   assert.match(section, /project\.c4\.container/);
   assert.doesNotMatch(section, /project\.mermaid/);
+  assert.match(section, /\\u2014/);
+  assert.doesNotMatch(section, /Ã|â/);
   assert.match(section, />Selected Projects<\//);
   assert.doesNotMatch(section, /Foundations and earlier work/);
   assert.doesNotMatch(section, /Academic and internship work that shaped my database, API, testing, and delivery fundamentals/);
