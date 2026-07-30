@@ -14,12 +14,8 @@
   component has an exact \`#### <component name>\` heading. Its five required
   fields must appear after that heading and before the next \`####\` component
   heading.
-- **Authoritative field labels:** \`**Nhi&#7879;m v&#7909;:**\`,
-  \`**T&aacute;c d&#7909;ng:**\`, \`**&#272;&#7847;u v&agrave;o:**\`,
-  \`**&#272;&#7847;u ra:**\`, and \`**Quan h&#7879; ch&iacute;nh:**\`.
-  These exact Vietnamese labels replace any mojibake text in earlier examples.
 - Write explanations in Vietnamese while preserving technical component names in English.
-- Use the fields **Nhiệm vụ**, **Tác dụng**, **Đầu vào**, **Đầu ra**, and **Quan hệ chính** for every component.
+- **Required field labels:** **Nhiệm vụ**, **Tác dụng**, **Đầu vào**, **Đầu ra**, and **Quan hệ chính**.
 - Use only component names, relationships, and generalized flows confirmed by `src/data/fleetPlatform.js` and `src/data/projects.js`.
 - Do not introduce private endpoint names, Kafka topics, schemas, tables, identifiers, deployment names, infrastructure addresses, metrics, or source-repository paths.
 - PostgreSQL is the database in all three project architectures.
