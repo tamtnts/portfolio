@@ -6,8 +6,7 @@ const systemContextDiagram = [
   '  Sources[External System: Approved Operational Data Sources]',
   '  OperationsStaff -->|Uses for workflow, lookup, and reporting| Platform',
   '  Administrator -->|Uses for planning, resources, and coordination| Platform',
-  '  Platform -->|REST/gRPC requests or approved events| Sources',
-  '  Sources -->|Approved responses or events| Platform',
+  '  Platform <-->|REST/gRPC requests, responses, and approved events| Sources',
 ].join('\n');
 
 export const fleetPlatform = {
@@ -30,8 +29,7 @@ export const fleetPlatform = {
         relationships: [
           'Fleet Operations Staff use the Fleet Operations Platform for workflow, lookup, and reporting.',
           'Administrators and dispatchers use the Fleet Operations Platform for planning, resources, and coordination.',
-          'The Fleet Operations Platform sends REST or gRPC requests and approved events to Approved Operational Data Sources.',
-          'Approved Operational Data Sources return approved responses or events to the Fleet Operations Platform.',
+          'The Fleet Operations Platform exchanges approved REST or gRPC requests, responses, and events with Approved Operational Data Sources.',
         ],
       },
     },

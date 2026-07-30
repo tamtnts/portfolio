@@ -27,6 +27,16 @@ export default function ProjectsSection() {
     });
   };
 
+  const openPlatformDiagram = () => {
+    const context = fleetPlatform.c4.context;
+    setModal({
+      open: true,
+      title: `${context.level} \u2014 ${fleetPlatform.name}: ${context.title}`,
+      code: context.code,
+      diagram: context,
+    });
+  };
+
   return (
     <section id='projects' className='section-shell scroll-mt-20'>
       <Container>
@@ -36,7 +46,10 @@ export default function ProjectsSection() {
           <p className='mt-3 max-w-2xl text-sm leading-relaxed text-muted'>
             An NDA-safe view of logistics systems I have contributed to, focused on responsibilities, architecture, and engineering decisions.
           </p>
-          <FleetPlatformOverview platform={fleetPlatform} />
+          <FleetPlatformOverview
+            platform={fleetPlatform}
+            onOpenDiagram={openPlatformDiagram}
+          />
         </Reveal>
         <div className='mt-10 grid gap-5 lg:grid-cols-3'>
           {projects.map((project, index) => (

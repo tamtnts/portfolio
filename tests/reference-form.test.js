@@ -157,6 +157,35 @@ test('homepage presents the three services as one connected platform', async () 
   assert.doesNotMatch(overview, /Ã|â/);
 });
 
+test('Connected platform preview opens the shared C1 diagram in the modal', async () => {
+  const [overview, section, diagram] = await Promise.all([
+    source('../src/components/FleetPlatformOverview.jsx'),
+    source('../src/components/sections/ProjectsSection.jsx'),
+    source('../src/components/MermaidDiagram.jsx'),
+  ]);
+  const previewBranch = diagram.match(
+    /if \(preview\) \{([\s\S]*?)\n\s{2}\}\n\n\s{2}return \(/,
+  )?.[1] ?? '';
+  const previewButton = previewBranch.match(/<button\b[\s\S]*?\n\s*>/)?.[0] ?? '';
+  const previewVisual = previewBranch.match(/<span\b[\s\S]*?\n\s*\/?>/)?.[0] ?? '';
+
+  assert.equal((previewBranch.match(/<button\b/g) ?? []).length, 1);
+  assert.match(previewButton, /aria-label=\{`Open \$\{title\} architecture`\}/);
+  assert.match(previewButton, /aria-describedby=\{descriptionId\}/);
+  assert.match(previewButton, /onClick=\{\(\) => onOpen\?\.\(\)\}/);
+  assert.match(previewVisual, /aria-hidden=['"]true['"]/);
+  assert.doesNotMatch(previewBranch, /TransformWrapper|TransformComponent/);
+  assert.doesNotMatch(previewBranch, /Zoom in|Zoom out|Reset diagram/);
+
+  assert.match(overview, /onOpen=\{\(\) => onOpenDiagram\?\.\(context\)\}/);
+  assert.match(section, /onOpenDiagram=\{openPlatformDiagram\}/);
+  assert.match(
+    section,
+    /const context = fleetPlatform\.c4\.context;[\s\S]*?code: context\.code,[\s\S]*?diagram: context,/,
+  );
+  assert.match(section, /diagram=\{modal\.diagram\}/);
+});
+
 test('homepage uses the compact reference geometry and approved anchors', async () => {
   const [home, toc, hero, styles] = await Promise.all([
     source('../src/pages/Home.jsx'),
