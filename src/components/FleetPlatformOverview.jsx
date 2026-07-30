@@ -15,13 +15,6 @@ export default function FleetPlatformOverview({ platform, onOpenDiagram }) {
             <h3 className='mt-2 text-2xl font-black tracking-tight text-text'>{platform.name}</h3>
             <p className='mt-3 text-sm leading-6 text-muted'>{platform.summary}</p>
             <p className='mt-4 border-l-2 border-accent/40 pl-3 text-xs leading-5 text-muted'>{platform.disclaimer}</p>
-            <button
-              type='button'
-              className='mt-5 min-h-11 rounded border border-border px-4 py-2 text-sm font-semibold text-text transition hover:border-accent hover:text-accent'
-              onClick={() => onOpenDiagram?.(context)}
-            >
-              Open Architecture
-            </button>
           </div>
           <C4DiagramSummary id={descriptionId} diagram={context} />
           <MermaidDiagram
