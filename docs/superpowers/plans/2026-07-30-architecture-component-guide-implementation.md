@@ -10,10 +10,12 @@
 
 ## Global Constraints
 
-- **Authoritative component-entry contract:** every unique public C1, C2, or C3
-  component has an exact \`#### <component name>\` heading. Its five required
-  fields must appear after that heading and before the next \`####\` component
-  heading.
+- **Authoritative component-entry contract:** derive the ordered heading
+  multiset from shared C1, then every project's C2 and C3
+  `accessibility.elements`, preserving repeated components. Every occurrence
+  has an exact `#### <component name>` heading, no extra `####` headings are
+  allowed, and its five required fields appear after that heading and before
+  the next `####` component heading.
 - Write explanations in Vietnamese while preserving technical component names in English.
 - **Required field labels:** **Nhiệm vụ**, **Tác dụng**, **Đầu vào**, **Đầu ra**, and **Quan hệ chính**.
 - Use only component names, relationships, and generalized flows confirmed by `src/data/fleetPlatform.js` and `src/data/projects.js`.
@@ -118,11 +120,13 @@ test('architecture guide stays PostgreSQL-based and NDA-safe', async () => {
 ```
 
 **Correction to the Task 1 code example:** the committed test must use the
-Unicode escape values from the Global Constraints and derive a \`Set\` of
-all public elements. For each component, it must match an exact
-\`#### <component name>\` entry and assert every authoritative field label
-within that captured entry. It must not accept labels that occur only elsewhere
-in the guide.
+Unicode escape values from the Global Constraints and derive the complete
+ordered heading multiset from C1 plus every project's C2 and C3 elements,
+without deduplication. It must parse every actual `####` entry, compare the
+actual and expected heading sequences exactly, and assert every authoritative
+field label within every parsed entry. Mutation cases must prove the contract
+rejects missing repeated entries, duplicates, extra headings, and a field
+missing from a repeated entry.
 
 - [ ] **Step 2: Run the focused test to verify it fails**
 
@@ -385,7 +389,14 @@ $privateIdentifierFragments = @(
 $privateIdentifiers = $privateIdentifierFragments |
   ForEach-Object { $_ -join '' }
 $privateMatches = Select-String -Path $guidePath -SimpleMatch -Pattern $privateIdentifiers
-$genericMatches = Select-String -Path $guidePath -Pattern 'MongoDB|10\.\d+\.\d+\.\d+'
+$genericMatches = Select-String -Path $guidePath -Pattern @(
+  'MongoDB',
+  '\b10(?:\.\d{1,3}){3}\b',
+  '\b172\.(?:1[6-9]|2\d|3[01])(?:\.\d{1,3}){2}\b',
+  '\b192\.168(?:\.\d{1,3}){2}\b',
+  '(?:https?://[^\s)]+|\b(?:GET|POST|PUT|PATCH|DELETE)\s+/[a-z0-9_./{}:-]+|/api/v\d+(?:/[a-z0-9_{}.-]+)*)',
+  '\b(?:endpoint|topic|schema|table|deployment)(?:\s+(?:name|identifier))?\s*(?::|=|named\s+)\s*[/'']?[a-z0-9][a-z0-9_./{}:-]*'
+)
 
 if ($privateMatches -or $genericMatches) {
   $privateMatches

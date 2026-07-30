@@ -57,13 +57,12 @@ export default function MermaidDiagram({
         <button
           type='button'
           aria-label={`Open ${title} architecture`}
+          aria-describedby={descriptionId}
           className='block w-full cursor-zoom-in p-4 text-left transition hover:bg-white/5 focus-visible:bg-white/5'
           onClick={() => onOpen?.()}
         >
           <span
-            role='img'
-            aria-label={title}
-            aria-describedby={descriptionId}
+            aria-hidden='true'
             className='block w-full max-w-full overflow-hidden [&_svg]:!h-auto [&_svg]:!w-full [&_svg]:!max-w-full'
             dangerouslySetInnerHTML={{ __html: renderState.svg }}
           />
