@@ -371,7 +371,7 @@ Run:
 & 'C:\Program Files\nodejs\npm.cmd' test -- --test-name-pattern "architecture guide"
 ```
 
-Expected: PASS for both guide tests.
+Expected: all architecture-guide contract tests pass.
 
 - [ ] **Step 8: Scan the guide for prohibited content**
 
