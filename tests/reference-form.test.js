@@ -157,6 +157,23 @@ test('homepage presents the three services as one connected platform', async () 
   assert.doesNotMatch(overview, /Ã|â/);
 });
 
+test('Connected platform preview opens the shared C1 diagram in the modal', async () => {
+  const [overview, section, diagram] = await Promise.all([
+    source('../src/components/FleetPlatformOverview.jsx'),
+    source('../src/components/sections/ProjectsSection.jsx'),
+    source('../src/components/MermaidDiagram.jsx'),
+  ]);
+
+  assert.match(overview, /onOpenDiagram/);
+  assert.match(overview, /Open Architecture/);
+  assert.match(overview, /preview/);
+  assert.match(section, /openPlatformDiagram/);
+  assert.match(section, /fleetPlatform\.c4\.context/);
+  assert.match(section, /onOpenDiagram=\{openPlatformDiagram\}/);
+  assert.match(diagram, /preview\s*=\s*false/);
+  assert.match(diagram, /onOpen/);
+});
+
 test('homepage uses the compact reference geometry and approved anchors', async () => {
   const [home, toc, hero, styles] = await Promise.all([
     source('../src/pages/Home.jsx'),

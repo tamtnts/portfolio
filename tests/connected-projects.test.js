@@ -61,6 +61,37 @@ test('publishes a strict shared C1 System Context view', () => {
   assert.doesNotMatch(context.code, /Fleet Operations Core|Fleet Administration & Dispatch|Fleet Data Intelligence Hub|Kafka|Redis|MongoDB|Elasticsearch/);
 });
 
+test('uses PostgreSQL throughout fleet project architecture and content', () => {
+  const projectText = JSON.stringify(projects);
+
+  assert.doesNotMatch(projectText, /MongoDB/i);
+  assert.doesNotMatch(projectText, /document-oriented/i);
+  assert.match(projectText, /PostgreSQL/);
+
+  for (const project of projects) {
+    assert.match(project.c4.container.code, /PostgreSQL/);
+    assert.match(project.techStack.join(' '), /PostgreSQL/);
+  }
+});
+
+test('uses layered C4 layouts without duplicate source relationships', () => {
+  const context = fleetPlatform.c4.context.code;
+  const sourceRelationships = context
+    .split('\n')
+    .filter((line) => /Platform.*Sources|Sources.*Platform/.test(line));
+
+  assert.equal(sourceRelationships.length, 1);
+  assert.match(sourceRelationships[0], /<-->/);
+
+  for (const project of projects) {
+    assert.match(project.c4.container.code, /^flowchart TB/m);
+    assert.match(project.c4.container.code, /subgraph Clients/);
+    assert.match(project.c4.container.code, /subgraph Services/);
+    assert.match(project.c4.container.code, /subgraph DataStores/);
+    assert.match(project.c4.component.code, /^flowchart TB/m);
+  }
+});
+
 test('keeps the three case studies qualitative and NDA-safe', () => {
   const publicText = JSON.stringify(projects);
   assert.doesNotMatch(publicText, /~?\d+\s*(?:apis?|ms|%|users?|requests?|records?)/i);
