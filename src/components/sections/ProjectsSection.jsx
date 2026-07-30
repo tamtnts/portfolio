@@ -27,7 +27,7 @@ export default function ProjectsSection() {
       <Container>
         <Reveal>
           <div className='font-mono text-xs text-muted'>Featured Projects</div>
-          <h2 className='mt-2 text-xl font-black text-text'>Selected backend case studies</h2>
+          <h2 className='mt-2 text-xl font-black text-text'>Products and production systems</h2>
           <p className='mt-3 max-w-2xl text-sm leading-relaxed text-muted'>
             An NDA-safe view of logistics systems I have contributed to, focused on responsibilities, architecture, and engineering decisions.
           </p>
