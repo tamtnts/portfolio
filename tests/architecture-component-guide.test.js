@@ -19,6 +19,21 @@ const requiredFields = [
 
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+const privateIdentifierFragments = [
+  ['project', '-', '165'],
+  ['ttttch', '165'],
+  ['data', '-', 'mining', '-', 'service'],
+  ['admin', '-', 'service'],
+  ['app', '-', 'service'],
+];
+
+const privateIdentifierPattern = new RegExp(
+  privateIdentifierFragments
+    .map((fragments) => escapeRegExp(fragments.join('')))
+    .join('|'),
+  'i',
+);
+
 test('architecture guide gives every public C1 C2 and C3 component its own complete entry', async () => {
   const guide = await readFile(guideUrl, 'utf8');
   const diagrams = [
@@ -62,10 +77,7 @@ test('architecture guide stays PostgreSQL-based and NDA-safe', async () => {
 
   assert.match(guide, /PostgreSQL/);
   assert.doesNotMatch(guide, /MongoDB/i);
-  assert.doesNotMatch(
-    guide,
-    /project-165|ttttch165|data-mining-service|admin-service|app-service/i,
-  );
+  assert.doesNotMatch(guide, privateIdentifierPattern);
   assert.doesNotMatch(
     guide,
     /(?:https?:\/\/)?10\.\d+\.\d+\.\d+|\/api\/v\d+|topic\s*[:=]|table\s*[:=]/i,
