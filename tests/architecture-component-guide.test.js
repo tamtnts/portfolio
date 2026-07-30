@@ -10,14 +10,16 @@ const guideUrl = new URL(
 );
 
 const requiredFields = [
-  'Nhi\u00e1\u00bb\u2021m v\u00e1\u00bb\u00a5',
-  'T\u00c3\u00a1c d\u00e1\u00bb\u00a5ng',
-  '\u00c4\u0090\u00e1\u00ba\u00a7u v\u00c3\u00a0o',
-  '\u00c4\u0090\u00e1\u00ba\u00a7u ra',
-  'Quan h\u00e1\u00bb\u2021 ch\u00c3\u00adnh',
+  'Nhi\u1ec7m v\u1ee5',
+  'T\u00e1c d\u1ee5ng',
+  '\u0110\u1ea7u v\u00e0o',
+  '\u0110\u1ea7u ra',
+  'Quan h\u1ec7 ch\u00ednh',
 ];
 
-test('architecture guide covers every public C1 C2 and C3 component', async () => {
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+test('architecture guide gives every public C1 C2 and C3 component its own complete entry', async () => {
   const guide = await readFile(guideUrl, 'utf8');
   const diagrams = [
     fleetPlatform.c4.context,
@@ -28,20 +30,30 @@ test('architecture guide covers every public C1 C2 and C3 component', async () =
   ];
 
   for (const project of projects) {
-    assert.match(guide, new RegExp(project.title.replace(/[.*+?^\${}()|[\]\\]/g, '\\$&')));
+    assert.match(guide, new RegExp(escapeRegExp(project.title)));
   }
 
-  for (const diagram of diagrams) {
-    for (const element of diagram.accessibility.elements) {
-      assert.ok(
-        guide.includes(element),
-        `Missing architecture component: ${element}`,
+  const components = new Set(
+    diagrams.flatMap((diagram) => diagram.accessibility.elements),
+  );
+
+  for (const component of components) {
+    const entry = guide.match(
+      new RegExp(
+        `^#### ${escapeRegExp(component)}\\s*$([\\s\\S]*?)(?=^#### |(?![\\s\\S]))`,
+        'm',
+      ),
+    );
+
+    assert.ok(entry, `Missing architecture component entry: ${component}`);
+
+    for (const field of requiredFields) {
+      assert.match(
+        entry[1],
+        new RegExp(`^\\*\\*${field}:\\*\\*`, 'm'),
+        `Missing ${field} in architecture component entry: ${component}`,
       );
     }
-  }
-
-  for (const field of requiredFields) {
-    assert.match(guide, new RegExp(`\\*\\*${field}:\\*\\*`));
   }
 });
 

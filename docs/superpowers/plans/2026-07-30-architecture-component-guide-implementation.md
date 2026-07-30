@@ -10,6 +10,14 @@
 
 ## Global Constraints
 
+- **Authoritative component-entry contract:** every unique public C1, C2, or C3
+  component has an exact \`#### <component name>\` heading. Its five required
+  fields must appear after that heading and before the next \`####\` component
+  heading.
+- **Authoritative field labels:** \`**Nhi&#7879;m v&#7909;:**\`,
+  \`**T&aacute;c d&#7909;ng:**\`, \`**&#272;&#7847;u v&agrave;o:**\`,
+  \`**&#272;&#7847;u ra:**\`, and \`**Quan h&#7879; ch&iacute;nh:**\`.
+  These exact Vietnamese labels replace any mojibake text in earlier examples.
 - Write explanations in Vietnamese while preserving technical component names in English.
 - Use the fields **Nhiệm vụ**, **Tác dụng**, **Đầu vào**, **Đầu ra**, and **Quan hệ chính** for every component.
 - Use only component names, relationships, and generalized flows confirmed by `src/data/fleetPlatform.js` and `src/data/projects.js`.
@@ -99,6 +107,13 @@ test('architecture guide stays PostgreSQL-based and NDA-safe', async () => {
 });
 ```
 
+**Correction to the Task 1 code example:** the committed test must use the
+Unicode escape values from the Global Constraints and derive a \`Set\` of
+all public elements. For each component, it must match an exact
+\`#### <component name>\` entry and assert every authoritative field label
+within that captured entry. It must not accept labels that occur only elsewhere
+in the guide.
+
 - [ ] **Step 2: Run the focused test to verify it fails**
 
 Run:
@@ -163,6 +178,10 @@ Mỗi thành phần được trình bày theo năm ý:
 - **C3 — Component View:** mô tả các khối trách nhiệm bên trong từng backend
   service.
 ```
+
+Use \`#### <component name>\` for every component entry throughout the
+guide. Immediately below the heading, include all five authoritative labels
+from Global Constraints before the next \`####\` component heading.
 
 - [ ] **Step 2: Document the shared C1 System Context**
 
