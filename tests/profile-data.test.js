@@ -19,6 +19,22 @@ test('profile exposes the approved public identity and contact details', () => {
   assert.equal(profile.certifications.length, 4);
 });
 
+test('GTEL OTS experience presents the approved Middle Backend responsibilities', () => {
+  const gtelExperience = profile.experience.find(({ company }) => company === 'GTEL OTS');
+
+  assert.deepEqual(gtelExperience?.highlights, [
+    'Develop and maintain Java 17+ and Spring Boot microservices for vehicle lookup, journey data, operational statistics, and record exports.',
+    'Design Oracle, PostgreSQL, MySQL, and MongoDB data models; optimize SQL queries, indexing, partitioning, transactions, and persistence with Spring Data JPA/Hibernate.',
+    'Build resilient Kafka consumers and asynchronous synchronization workers with retry, idempotency, and dead-letter handling.',
+    'Use Redis for caching, distributed locking, rate limiting, and temporary state coordination.',
+    'Integrate microservices through gRPC and REST APIs; implement JWT/OAuth2 authentication, RBAC authorization, and API security practices.',
+    'Optimize backend latency, throughput, and scalability for high-concurrency operational workloads.',
+    'Build, deploy, and troubleshoot services with Maven/Gradle, Docker, Kubernetes, and CI/CD pipelines.',
+    'Write unit and integration tests; monitor services through Prometheus, Grafana, ELK, and log analysis.',
+    'Participate in code reviews, technical design discussions, cross-functional collaboration, and mentoring junior developers.',
+  ]);
+});
+
 test('portfolio publishes three complete NDA-safe connected case studies', () => {
   assert.deepEqual(
     projects.map(({ slug }) => slug),
