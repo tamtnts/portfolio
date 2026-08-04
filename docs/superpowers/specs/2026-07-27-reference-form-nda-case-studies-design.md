@@ -129,7 +129,6 @@ English: Intermediate - able to communicate and read technical documentation.
 
 - Title: **Fleet Operations Management Platform**
 - Slug: `fleet-operations-management-platform`
-- Role: Middle Backend Developer
 - Domain: NDA-safe logistics fleet operations
 - Subtitle: a Spring backend that unifies multi-source vehicle and journey lookup, operational workflows, analytics, and document generation.
 - Disclaimer: names, business rules, data, topology, and customer details are fictionalized or generalized for confidentiality.
@@ -267,7 +266,6 @@ Lessons:
 
 - Title: **FleetOps Data Hub**
 - Slug: `fleetops-data-hub`
-- Role: Middle Backend Developer
 - Domain: multi-source logistics data integration and search
 
 ### 6.2 Confirmed scope
