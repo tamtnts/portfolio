@@ -4,7 +4,8 @@ import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const source = (path) => readFile(new URL(path, import.meta.url), 'utf8');
+const source = (path) => readFile(new URL(path, import.meta.url), 'utf8')
+  .then((contents) => contents.replace(/\r\n/g, '\n'));
 
 async function sourcesIn(directory) {
   const entries = await readdir(directory, { withFileTypes: true });

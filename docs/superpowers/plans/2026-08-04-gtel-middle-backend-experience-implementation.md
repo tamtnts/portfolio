@@ -113,4 +113,3 @@ git commit -m "feat: strengthen GTEL backend experience"
 - [ ] **Step 7: Merge the feature branch into main and verify the merged result**
 
 Use a clean worktree based on the latest `origin/main`, merge the feature branch without including unrelated working-tree changes, rerun `npm test`, `npm run lint`, and `npm run build`, then push the merge commit to `main`.
-
