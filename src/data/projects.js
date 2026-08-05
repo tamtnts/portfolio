@@ -220,7 +220,6 @@ export const projects = [
     overview: {
       domain: 'Fleet operations, workflow, lookup, and reporting',
       platform: 'A core service within the Fleet Operations Platform',
-      role: 'Middle Backend Developer',
     },
     requirements: [
       'Expose REST and gRPC interfaces for operational workflow and lookup use cases.',
@@ -301,7 +300,6 @@ export const projects = [
     overview: {
       domain: 'Fleet administration, planning, resources, and dispatch',
       platform: 'The administration and coordination service within the Fleet Operations Platform',
-      role: 'Middle Backend Developer',
     },
     requirements: [
       'Manage planning, resource, device, configuration, and reference-data workflows.',
@@ -382,7 +380,6 @@ export const projects = [
     overview: {
       domain: 'Fleet data synchronization, aggregation, and search',
       platform: 'The read-oriented data service within the Fleet Operations Platform',
-      role: 'Middle Backend Developer',
     },
     requirements: [
       'Receive approved source changes through events and service integrations.',

@@ -95,6 +95,7 @@ test('large project pages render the complete approved case-study form', async (
   }
   assert.match(detail, /if \(!when\) return null/);
   assert.match(detail, /Project not found/);
+  assert.doesNotMatch(detail, /project\.overview\.role|Role:/);
 });
 
 test('project pages render C1 C2 and C3 vertically with related services', async () => {

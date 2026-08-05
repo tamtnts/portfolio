@@ -51,7 +51,7 @@ test('portfolio publishes three complete NDA-safe connected case studies', () =>
     assert.ok(project.subtitle);
     assert.ok(project.disclaimer);
     assert.ok(project.overview.domain);
-    assert.equal(project.overview.role, 'Middle Backend Developer');
+    assert.equal(project.overview.role, undefined);
     assert.equal(project.overview.duration, undefined);
     assert.equal(project.overview.teamSize, undefined);
     assert.ok(project.tags.length >= 5);

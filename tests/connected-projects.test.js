@@ -28,7 +28,7 @@ test('publishes three connected fleet-platform services', () => {
 
   for (const project of projects) {
     assert.equal(project.featured, true);
-    assert.equal(project.overview.role, 'Middle Backend Developer');
+    assert.equal(project.overview.role, undefined);
     assert.match(project.overview.platform, /Fleet Operations Platform/);
     assert.equal(project.highlights.length, 3);
     assert.equal(project.scaling, undefined);
