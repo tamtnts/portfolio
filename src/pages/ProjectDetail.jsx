@@ -110,7 +110,6 @@ export default function ProjectDetail() {
               <div className='grid gap-3 text-sm text-muted sm:grid-cols-2'>
                 {project.overview.domain && <div><span className='font-mono text-xs'>Domain:</span> {project.overview.domain}</div>}
                 {project.overview.duration && <div><span className='font-mono text-xs'>Duration:</span> {project.overview.duration}</div>}
-                {project.overview.role && <div><span className='font-mono text-xs'>Role:</span> {project.overview.role}</div>}
                 {project.overview.teamSize && <div><span className='font-mono text-xs'>Team size:</span> {project.overview.teamSize}</div>}
                 {project.overview.scale && <div className='sm:col-span-2'><span className='font-mono text-xs'>Scale:</span> {project.overview.scale}</div>}
                 {project.overview.platform && <div className='sm:col-span-2'><span className='font-mono text-xs'>Platform:</span> {project.overview.platform}</div>}
