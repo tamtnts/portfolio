@@ -61,7 +61,7 @@ export default function ProjectsSection() {
 
         <div className='mt-14'>
           <Reveal>
-            <h2 className='text-2xl font-black tracking-tight text-text sm:text-3xl'>Selected Projects</h2>
+            <h2 className='text-2xl font-black tracking-tight text-text sm:text-3xl'>Academic Projects</h2>
           </Reveal>
           <div className='mt-8 grid gap-4 md:grid-cols-2'>
             {earlierProjects.map((project) => (

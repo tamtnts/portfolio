@@ -44,7 +44,6 @@ export const profile = {
   stack: {
     core: [
       'Java (Spring Boot)',
-      'Netty / TCP',
       'Kafka',
       'EMQX / MQTT',
       'Redis',
@@ -56,10 +55,7 @@ export const profile = {
     infrastructure: [
       'Kubernetes',
       'Rancher',
-      'Nginx',
-      'Grafana',
       'GitLab CI',
-      'Linux',
       'MinIO / S3',
     ],
   },
@@ -70,7 +66,7 @@ export const profile = {
       period: 'Aug 2024 - Present',
       highlights: [
         'Develop and maintain Java 17+ and Spring Boot microservices for vehicle lookup, journey data, operational statistics, and record exports.',
-        'Design Oracle, PostgreSQL, MySQL, and MongoDB data models; optimize SQL queries, indexing, partitioning, transactions, and persistence with Spring Data JPA/Hibernate.',
+        'Design Oracle, PostgreSQL, and MongoDB data models; optimize SQL queries, indexing, partitioning, transactions, and persistence with Spring Data JPA/Hibernate.',
         'Build resilient Kafka consumers and asynchronous synchronization workers with retry, idempotency, and dead-letter handling.',
         'Use Redis for caching, distributed locking, rate limiting, and temporary state coordination.',
         'Integrate microservices through gRPC and REST APIs; implement JWT/OAuth2 authentication, RBAC authorization, and API security practices.',
