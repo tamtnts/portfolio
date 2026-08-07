@@ -131,7 +131,7 @@ test('project cards expose qualitative highlights, detail navigation, and archit
   assert.doesNotMatch(section, /project\.mermaid/);
   assert.match(section, /\\u2014/);
   assert.doesNotMatch(section, /Ã|â/);
-  assert.match(section, />Selected Projects<\//);
+  assert.match(section, />Academic Projects<\//);
   assert.doesNotMatch(section, /Foundations and earlier work/);
   assert.doesNotMatch(section, /Academic and internship work that shaped my database, API, testing, and delivery fundamentals/);
 });

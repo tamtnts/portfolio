@@ -15,7 +15,6 @@ test('tech stack publishes the approved two-card native-emoji layout', async () 
 
   assert.deepEqual(profile.stack.core, [
     'Java (Spring Boot)',
-    'Netty / TCP',
     'Kafka',
     'EMQX / MQTT',
     'Redis',
@@ -27,10 +26,7 @@ test('tech stack publishes the approved two-card native-emoji layout', async () 
   assert.deepEqual(profile.stack.infrastructure, [
     'Kubernetes',
     'Rancher',
-    'Nginx',
-    'Grafana',
     'GitLab CI',
-    'Linux',
     'MinIO / S3',
   ]);
 
